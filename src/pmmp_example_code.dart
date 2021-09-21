@@ -1,8 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:markdown/markdown.dart';
 
-import 'MarkdownFileData.dart';
+import 'article.dart';
 
 void main() {
   convertMarkdownToHtml();
@@ -21,7 +22,7 @@ void convertMarkdownToHtml() async {
   var dir = Directory(markdownFolderPath);
   var files = await dir.list().toList();
 
-  var fileDataList = <MarkdownFileData>[];
+  var articleList = <Article>[];
   for (var index = 0; index < files.length; index++) {
     var file = File(files[index].path);
     var text = await file.readAsString();
@@ -30,16 +31,20 @@ void convertMarkdownToHtml() async {
     var bodyText = getBodyText(text);
     var title = getTitle(text);
 
-    fileDataList.add(
-        MarkdownFileData(url: '', tags: tags, title: title, body: bodyText));
+    articleList.add(
+        Article(url: '', tags: tags, title: title, body: bodyText));
   }
 
-  var outputPath = basePath + r'output\';
-  fileDataList.forEach((markdownFileData) {
+  var outputPath = basePath + r'web\';
+  var articleListAsJson = <String, Map<String,dynamic>>{};
+  var i=0;
+  articleList.forEach((markdownFileData) {
     generateHtml(markdownFileData, outputPath);
+    articleListAsJson[i.toString()] = markdownFileData.toJson();
+    i++;
   });
 
-  //todo:firebaseに保存
+  saveArticleData(articleListAsJson, basePath);
 }
 
 String getTitle(String markdown) {
@@ -51,7 +56,7 @@ String getTitle(String markdown) {
 
 List<Tag> getTagsFromMarkdown(String markdown) {
   var line = markdown.split('\n').first;
-  return line.split(' ').map((e) => Tag(e)).toList();
+  return line.split(' ').map((e) => Tag(e.replaceAll('\r', ''))).toList();
 }
 
 String getBodyText(String markdown) {
@@ -60,8 +65,15 @@ String getBodyText(String markdown) {
       .replaceFirst(RegExp('#(.*)'), '');
 }
 
-void generateHtml(MarkdownFileData fileData, String path) {
+void generateHtml(Article fileData, String path) {
   var html = markdownToHtml(fileData.body);
-  print(path);
-  File(path + fileData.title + '.html').create().then((value) => value.writeAsString(html));
+  //todo:main.dart(js)を読み込ませる
+  File(path + fileData.title + '.html')
+      .create()
+      .then((value) => value.writeAsString(html));
+}
+
+void saveArticleData(Map data,String path) {
+  var json = jsonEncode(data);
+  File(path + 'data.json').create().then((value) => value.writeAsString(json));
 }
