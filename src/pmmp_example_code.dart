@@ -31,13 +31,12 @@ void convertMarkdownToHtml() async {
     var bodyText = getBodyText(text);
     var title = getTitle(text);
 
-    articleList.add(
-        Article(url: '', tags: tags, title: title, body: bodyText));
+    articleList.add(Article(url: '$title.html', tags: tags, title: title, body: bodyText));
   }
 
   var outputPath = basePath + r'web\';
-  var articleListAsJson = <String, Map<String,dynamic>>{};
-  var i=0;
+  var articleListAsJson = <String, Map<String, dynamic>>{};
+  var i = 0;
   articleList.forEach((markdownFileData) {
     generateHtml(markdownFileData, outputPath);
     articleListAsJson[i.toString()] = markdownFileData.toJson();
@@ -66,14 +65,30 @@ String getBodyText(String markdown) {
 }
 
 void generateHtml(Article fileData, String path) {
-  var html = markdownToHtml(fileData.body);
-  //todo:main.dart(js)を読み込ませる
+  var html = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="article.css">
+
+    <script src="js/highlight.min.js"></script>
+    <link rel="stylesheet"
+          href="js/styles/idea.min.css">
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+${markdownToHtml(fileData.body)}
+</body>
+</html>
+  ''';
   File(path + fileData.title + '.html')
       .create()
       .then((value) => value.writeAsString(html));
 }
 
-void saveArticleData(Map data,String path) {
+void saveArticleData(Map data, String path) {
   var json = jsonEncode(data);
   File(path + 'data.json').create().then((value) => value.writeAsString(json));
 }

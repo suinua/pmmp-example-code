@@ -1,77 +1,56 @@
-import 'dart:convert';
 import 'dart:html';
 
-import 'package:firebase/firebase.dart' as fb;
+import 'article_list_manager.dart';
+import 'tag_selector.dart';
+import 'web_article.dart';
 
-import '../article.dart';
-import 'article_view.dart';
-
-List<Article> _articleList = [];
+ArticleListManager _articleListManager = ArticleListManager();
+TagSelector _tagSelector = TagSelector();
 
 void main() {
-  _fetchArticleData().then((_v) {
+  _articleListManager.init().then((_) {
     _insertTags();
-
-    var tagElements = querySelectorAll('.tag');
-    tagElements.forEach((element) {
-      element.onClick.listen((event) {
-        print(element.text);
-        var tag = Tag(element.text);
-        _displayArticleThumbnails(_findArticleByTags([tag]));
-      });
-    });
   });
-}
-
-void _displayArticleThumbnails(List<Article> articles) {
-  var articleListElement = querySelector('.article-list');
-  articleListElement!.children = [];
-  articleListElement.children
-      .addAll(articles.map((e) => articleToHtml(e)).toList());
-}
-
-//todo:リーダブル
-List<Article> _findArticleByTags(List<Tag> tags) {
-  var result = <Article>[];
-  _articleList.forEach((markdownFileData) {
-    var isTarget = false;
-    tags.forEach((tag) {
-      if (markdownFileData.tags.contains(tag)) isTarget = true;
-    });
-
-    if (isTarget) result.add(markdownFileData);
-  });
-
-  return result;
 }
 
 void _insertTags() {
-  var element = querySelector('.tag-list');
-  assert(element != null);
+  var tagListElement = querySelector('.tag-list');
+  assert(tagListElement != null);
 
-  Tag.defaultTags.forEach((Tag tag) {
-    element!.children.add(tagToHtml(tag));
+  WebTag.defaultTags.forEach((WebTag tag) {
+    var tagElement = tag.toHtmlElement();
+    tagElement.onClick.listen((_) => _onSelectedTag(tag, tagElement));
+
+    tagListElement!.children.add(tagElement);
   });
 }
 
-Future<void> _fetchArticleData() async {
-  fb.initializeApp(
-      apiKey: 'AIzaSyC0vZgbSMWa9QWYFAGyvavzOqhCa9dKpxs',
-      authDomain: '',
-      databaseURL: '',
-      projectId: 'pmmp-example-code',
-      storageBucket: 'pmmp-example-code.appspot.com');
+void _displayArticleThumbnails(List<WebArticle> articles) {
+  var articleListElement = querySelector('.article-list');
+  articleListElement!.children = [];
+  articleListElement.children
+      .addAll(articles.map((e) => e.toHtmlElement()).toList());
+}
 
-  var storage = fb.storage();
-  var value = await storage.ref('data.json').getDownloadURL();
-  var request = await HttpRequest.request(Uri.decodeFull(value.toString()));
+void _onSelectedTag(WebTag tag, HtmlElement tagElement) {
+  _tagSelector.select(tag);
+  _displayArticleThumbnails(
+      _articleListManager.findByTags(_tagSelector.getSelectedTags()));
 
-  var json = jsonDecode(request.response);
+  tagElement.style.display = 'none';
 
-  var result = <Article>[];
-  json.forEach((_k, data) {
-    result.add(Article.fromJson(Map<String,dynamic>.from(data)));
+  var selectedTagElement = DivElement()
+    ..className = 'selected-tag'
+    ..text = tag.text;
+
+  selectedTagElement.onClick.listen((event) {
+    _tagSelector.deselect(tag);
+
+    tagElement.style.display = '';
+    selectedTagElement.remove();
+    _displayArticleThumbnails(
+        _articleListManager.findByTags(_tagSelector.getSelectedTags()));
   });
 
-  _articleList = result;
+  querySelector('.selected-tag-list')?.children.add(selectedTagElement);
 }

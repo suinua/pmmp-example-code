@@ -23,30 +23,9 @@ class Article {
       'body': body
     };
   }
-
-  Article.fromJson(Map<String, dynamic> json)
-      : url = json['url'],
-        tags = List<String>.from(json['tags']).map((e) => Tag(e)).toList(),
-        title = json['title'],
-        body = json['body'];
 }
 
 class Tag {
   final text;
-  static List<Tag> defaultTags = [
-    Tag.Entity(),
-  ];
-
-  Tag(this.text);
-
-  Tag.Entity() : text = 'Entity';
-
-  @override
-  bool operator ==(Object other) {
-    if (other is Tag) {
-      return text == other.text;
-    } else {
-      return false;
-    }
-  }
+  const Tag(this.text);
 }

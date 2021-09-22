@@ -1,0 +1,8 @@
+pre {
+    margin: 1em 0;
+    padding: 1em;
+    border-radius: 5px;
+    background: #5c6675;
+    color: #fff;
+    white-space: pre-wrap;
+}
