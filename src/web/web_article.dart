@@ -18,7 +18,7 @@ class WebArticle {
         body = body;
 
   bool hasWebTag(List<WebTag> objects) {
-    for (var i=0; i < objects.length; i++) {
+    for (var i = 0; i < objects.length; i++) {
       if (tags.contains(objects[i])) return true;
     }
 
@@ -27,7 +27,10 @@ class WebArticle {
 
   WebArticle.fromJson(Map<String, dynamic> json)
       : url = json['url'],
-        tags = List<String>.from(json['tags']).map((e) => WebTag(e)).toList(),
+        tags = List<Map<String, String>>.from(json['tags'])
+            .map((element) =>
+                WebTag(WebTagCategory(element['category']), element['text']))
+            .toList(),
         title = json['title'],
         body = json['body'];
 
@@ -47,23 +50,10 @@ class WebArticle {
 }
 
 class WebTag {
+  final WebTagCategory category;
   final text;
 
-  static const List<WebTag> defaultTags = [
-    WebTag.Entity(),
-    WebTag.Player(),
-    WebTag.World(),
-    WebTag.Particle(),
-    WebTag.Effect(),
-  ];
-
-  const WebTag(this.text);
-
-  const WebTag.Entity() : text = 'Entity';
-  const WebTag.Player() : text = 'Player';
-  const WebTag.World() : text = 'World';
-  const WebTag.Particle() : text = 'Particle';
-  const WebTag.Effect() : text = 'Effect';
+  const WebTag(this.category, this.text);
 
   @override
   bool operator ==(Object other) {
@@ -78,5 +68,122 @@ class WebTag {
     return DivElement()
       ..text = text
       ..className = 'tag';
+  }
+}
+
+class WebTagCategory {
+  final text;
+
+  WebTagCategory(this.text);
+}
+
+class BasedWebTagCategory {
+  final text;
+  final List<BasedWebTagCategory> children;
+
+  static List<BasedWebTagCategory> parentCategories = [
+    BasedWebTagCategory.Entity(),
+    BasedWebTagCategory.Player(),
+    BasedWebTagCategory.World(),
+    BasedWebTagCategory.Particle(),
+    BasedWebTagCategory.Effect(),
+  ];
+
+  //Entity
+  BasedWebTagCategory.Entity()
+      : text = 'Entity',
+        children = [BasedWebTagCategory.Zombie()];
+
+  BasedWebTagCategory.Zombie()
+      : text = 'Zombie',
+        children = [];
+
+  //Player
+  BasedWebTagCategory.Player()
+      : text = 'Player',
+        children = [];
+
+  //World
+  BasedWebTagCategory.World()
+      : text = 'World',
+        children = [];
+
+  //Particle
+  BasedWebTagCategory.Particle()
+      : text = 'Particle',
+        children = [];
+
+  //Effect
+  BasedWebTagCategory.Effect()
+      : text = 'Effect',
+        children = [];
+
+  //Plugin
+  BasedWebTagCategory.Plugin()
+      : text = 'Plugin',
+        children = [BasedWebTagCategory.PVE()];
+  BasedWebTagCategory.PVE()
+      : text = 'PVE',
+        children = [];
+  BasedWebTagCategory.PVP()
+      : text = 'PVP',
+        children = [];
+}
+
+
+class WebArticleCategory {
+  final text;
+
+  WebArticleCategory(this.text);
+}
+
+class BasedWebArticleCategory {
+  final text;
+  final List<BasedWebArticleCategory> children;
+
+  static List<BasedWebArticleCategory> parentCategories = [
+    BasedWebArticleCategory.Entity(),
+    BasedWebArticleCategory.Player(),
+    BasedWebArticleCategory.World(),
+    BasedWebArticleCategory.Particle(),
+    BasedWebArticleCategory.Effect(),
+  ];
+
+  //Entity
+  BasedWebArticleCategory.Entity()
+      : text = 'Entity',
+        children = [BasedWebArticleCategory.Zombie()];
+
+  BasedWebArticleCategory.Zombie()
+      : text = 'Zombie',
+        children = [];
+
+  //Player
+  BasedWebArticleCategory.Player()
+      : text = 'Player',
+        children = [];
+
+  //World
+  BasedWebArticleCategory.World()
+      : text = 'World',
+        children = [];
+
+  //Particle
+  BasedWebArticleCategory.Particle()
+      : text = 'Particle',
+        children = [];
+
+  //Effect
+  BasedWebArticleCategory.Effect()
+      : text = 'Effect',
+        children = [];
+
+  @override
+  bool operator ==(Object other) {
+    if (other is BasedWebArticleCategory) {
+      return text == other.text;
+    } else {
+      return false;
+    }
   }
 }

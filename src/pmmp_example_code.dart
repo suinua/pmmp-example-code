@@ -25,13 +25,8 @@ void convertMarkdownToHtml() async {
   var articleList = <Article>[];
   for (var index = 0; index < files.length; index++) {
     var file = File(files[index].path);
-    var text = await file.readAsString();
-
-    var tags = getTagsFromMarkdown(text);
-    var bodyText = getBodyText(text);
-    var title = getTitle(text);
-
-    articleList.add(Article(url: '$title.html', tags: tags, title: title, body: bodyText));
+    var markdownText = await file.readAsString();
+    articleList.add(markdownToArticle(markdownText));
   }
 
   var outputPath = basePath + r'web\';
@@ -46,22 +41,26 @@ void convertMarkdownToHtml() async {
   saveArticleData(articleListAsJson, basePath);
 }
 
-String getTitle(String markdown) {
-  var title = RegExp(r'#(.*)').firstMatch(markdown)?.group(0);
-  assert(title != null);
+Article markdownToArticle(String markdown) {
+  markdown = markdown.replaceAll('\r', '');
+  var lines = markdown.split('\n');
+  var articleCategoryLine = lines[0];
+  var tagsLine = lines[1];
+  var titleLine = lines[2];
 
-  return title!.replaceAll('# ', '');
-}
+  var title = titleLine.replaceAll('# ', '');
+  var articleCategory = ArticleCategory(articleCategoryLine);
 
-List<Tag> getTagsFromMarkdown(String markdown) {
-  var line = markdown.split('\n').first;
-  return line.split(' ').map((e) => Tag(e.replaceAll('\r', ''))).toList();
-}
+  var tags = <Tag>[];
+  tagsLine.split(' ').toList().forEach((value){
+    var tagCategory = TagCategory(value.split(':')[0]);
+    var text = value.split(':')[1];
+    tags.add(Tag(tagCategory, text));
+  });
 
-String getBodyText(String markdown) {
-  return markdown
-      .replaceFirst(RegExp('^(.*)'), '')
-      .replaceFirst(RegExp('#(.*)'), '');
+  var body = markdown.replaceAll(RegExp(r'(.*)\n(.*)\n#'), '');
+
+  return Article(url: '$title.html', category: articleCategory, tags: tags, title: title, body: body);
 }
 
 void generateHtml(Article fileData, String path) {
@@ -70,7 +69,7 @@ void generateHtml(Article fileData, String path) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>${fileData.title}</title>
     <link rel="stylesheet" href="article.css">
 
     <script src="js/highlight.min.js"></script>
