@@ -4,9 +4,20 @@ import 'dart:html';
 import 'package:firebase/firebase.dart' as fb;
 
 import 'web_article.dart';
+import 'web_article_category.dart';
+import 'web_tag.dart';
 
 class ArticleListManager {
+  static ArticleListManager? _instance;
+
   List<WebArticle> _articleList = [];
+
+  ArticleListManager._internal();
+
+  factory ArticleListManager() {
+    _instance ??= ArticleListManager._internal();
+    return _instance!;
+  }
 
   Future<void> init() {
     return _fetchArticleData();
@@ -27,15 +38,31 @@ class ArticleListManager {
     var json = jsonDecode(request.response);
 
     var result = <WebArticle>[];
-    json.forEach((_k, data) {
+    json.forEach((_, data) {
       result.add(WebArticle.fromJson(Map<String, dynamic>.from(data)));
     });
 
     _articleList = result;
   }
 
-//todo:リーダブル
   List<WebArticle> findByTags(List<WebTag> tags) {
     return _articleList.where((element) => element.hasWebTag(tags)).toList();
+  }
+
+  List<WebArticle> findByCategory(DefinedArticleCategory DefineCategory) {
+    var category = DefineCategory.toWebArticleCategory();
+
+    var result = <WebArticle>[];
+    for (var i = 0; i < _articleList.length; i++) {
+      var article = _articleList[i];
+
+      if (article.category == category) {
+        result.add(article);
+      } else if (article.category.parents.contains(category)) {
+        result.add(article);
+      }
+    }
+
+    return result;
   }
 }

@@ -8,7 +8,6 @@ html {
 
 body {
     overflow: hidden;
-    margin-top: 10px;
     margin-left: calc(-50vw + 50%);
     margin-right: calc(-50vw + 50%);
 }
@@ -19,20 +18,8 @@ body {
 }
 
 .context {
-    width: 80%;
+    width: 85%;
     height: 100vw;
-    background-color: aquamarine;
-}
-
-.side-bar {
-    width: 20%;
-    height: 100vw;
-    background-color: aqua;
-}
-
-.tag {
-    font-size: 150%;
-    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 .article-list {
@@ -60,4 +47,48 @@ body {
     font-size: 90%;
     font-family: 'Be Vietnam Pro', sans-serif;
     color: #969696;
+}
+
+.side-bar {
+    width: 15%;
+    height: 100vw;
+    border-left: solid 2px #cccccc;
+    text-align: center;
+}
+
+.search {
+}
+
+.tag-list {
+    text-align: left;
+}
+
+.tag {
+     color: #5a5a5a;
+     margin-top: 20px;
+     margin-left: 20px;
+     font-size: 150%;
+     font-family: 'Be Vietnam Pro', sans-serif;
+ }
+
+.tag .tag{
+    font-size: 100%;
+}
+.tag .tag .tag{
+    font-size: 80%;
+}
+
+.category {
+    color: #5a5a5a;
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: 150%;
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+.category .category{
+    font-size: 100%;
+}
+.category .category .category{
+    font-size: 80%;
 }

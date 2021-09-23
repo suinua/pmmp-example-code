@@ -2,23 +2,29 @@ import 'dart:html';
 
 import 'article_list_manager.dart';
 import 'tag_selector.dart';
-import 'web_article.dart';
+import 'web_article_category.dart';
+import 'web_tag.dart';
 
-ArticleListManager _articleListManager = ArticleListManager();
-TagSelector _tagSelector = TagSelector();
+
 
 void main() {
+  var _articleListManager = ArticleListManager();
+  TagSelector();
+
   _articleListManager.init().then((_) {
+    _insertCategoryList();
+    _insertTagList();
   });
 }
 
-void _displayArticleThumbnails(List<WebArticle> articles) {
-  var articleListElement = querySelector('.article-list');
-  articleListElement!.children = [];
-  articleListElement.children
-      .addAll(articles.map((e) => e.toHtmlElement()).toList());
+void _insertCategoryList() {
+  var categoryListHtmlElement = querySelector('.category-list');
+  var elements = DefinedArticleCategory.parentCategories.map((e) => e.toHtmlElement());
+  categoryListHtmlElement!.children.addAll(elements);
 }
 
-void _insertCategoryList() {
-  
+void _insertTagList() {
+  var categoryListHtmlElement = querySelector('.tag-list');
+  var elements = DefinedWebTag.parentCategories.map((e) => e.toHtmlElement());
+  categoryListHtmlElement!.children.addAll(elements);
 }

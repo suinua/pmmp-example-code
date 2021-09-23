@@ -19,19 +19,13 @@ class Article {
         body = body;
 
   Map<String, dynamic> toJson() {
-    var tagsAsJson = <Map<String, String>>[];
-
-    tags.forEach((tag) {
-      tagsAsJson.add({
-        'category': tag.category.text,
-        'text': tag.text,
-      });
-    });
-
     return {
       'url': url,
-      'category': category.text,
-      'tags': tagsAsJson,
+      'category': {
+        'parents': category.parents.map((e) => e.text).toList(),
+        'text': category.text
+      },
+      'tags': tags.map((e) => e.text).toList(),
       'title': title,
       'body': body
     };
@@ -39,20 +33,14 @@ class Article {
 }
 
 class Tag {
-  final TagCategory category;
   final String text;
 
-  const Tag(this.category, this.text);
-}
-
-class TagCategory {
-  final text;
-
-  const TagCategory(this.text);
+  const Tag(this.text);
 }
 
 class ArticleCategory {
   final text;
+  final List<ArticleCategory> parents;
 
-  const ArticleCategory(this.text);
+  const ArticleCategory(this.parents, this.text);
 }

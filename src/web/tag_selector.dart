@@ -1,9 +1,16 @@
-import 'web_article.dart';
+import 'web_tag.dart';
 
 class TagSelector {
+  static TagSelector? _instance;
+
   final List<WebTag> _selectedTagList;
 
-  TagSelector():_selectedTagList = [];
+  TagSelector._internal() : _selectedTagList = [];
+
+  factory TagSelector() {
+    _instance ??= TagSelector._internal();
+    return _instance!;
+  }
 
   void select(WebTag tag) {
     if (_selectedTagList.contains(tag)) return;

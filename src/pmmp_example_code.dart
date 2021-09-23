@@ -49,13 +49,14 @@ Article markdownToArticle(String markdown) {
   var titleLine = lines[2];
 
   var title = titleLine.replaceAll('# ', '');
-  var articleCategory = ArticleCategory(articleCategoryLine);
+
+  var articleCategoryValues = articleCategoryLine.split(':');
+  var articleCategoryParents = articleCategoryValues[0].split(',').map((e) => ArticleCategory([],e)).toList();
+  var articleCategory = ArticleCategory(articleCategoryParents, articleCategoryValues[1]);
 
   var tags = <Tag>[];
-  tagsLine.split(' ').toList().forEach((value){
-    var tagCategory = TagCategory(value.split(':')[0]);
-    var text = value.split(':')[1];
-    tags.add(Tag(tagCategory, text));
+  tagsLine.split(' ').toList().forEach((text){
+    tags.add(Tag(text));
   });
 
   var body = markdown.replaceAll(RegExp(r'(.*)\n(.*)\n#'), '');
