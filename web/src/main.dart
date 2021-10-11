@@ -7,8 +7,6 @@ import 'model/tag.dart';
 import 'view/article_category_view.dart';
 import 'view/tag_view.dart';
 
-
-
 void main() {
   var _articleListManager = ArticleListManager();
   TagSelector();
@@ -21,12 +19,14 @@ void main() {
 
 void _insertCategoryList() {
   var categoryListHtmlElement = querySelector('.category-list');
-  var elements = DefinedArticleCategory.parentCategories.map((e) => ArticleCategoryView.convert(e));
+  var elements = DefinedArticleCategory.parentCategories
+      .map((e) => ArticleCategoryView.convert(e, isTopParent: true));
   categoryListHtmlElement!.children.addAll(elements);
 }
 
 void _insertTagList() {
   var categoryListHtmlElement = querySelector('.tag-list');
-  var elements = DefinedTag.parentCategories.map((e) => TagView.convert(e));
+  var elements = DefinedTag.parentCategories
+      .map((e) => TagView.convert(e, isTopParent: true));
   categoryListHtmlElement!.children.addAll(elements);
 }

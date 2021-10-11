@@ -44,31 +44,57 @@ class DefinedTag {
   //Player
   DefinedTag.Player()
       : text = 'Player',
+        children = [DefinedTag.Device()];
+
+  DefinedTag.Device()
+      : text = 'Teleport',
         children = [];
 
   //World
   DefinedTag.World()
       : text = 'World',
+        children = [DefinedTag.Chunk()];
+
+  DefinedTag.Chunk()
+      : text = 'Chunk',
         children = [];
 
   //Particle
   DefinedTag.Particle()
       : text = 'Particle',
+        children = [DefinedTag.Firework()];
+
+  DefinedTag.Firework()
+      : text = 'Firework',
         children = [];
 
   //Effect
   DefinedTag.Effect()
       : text = 'Effect',
+        children = [DefinedTag.Test()];
+
+  DefinedTag.Test()
+      : text = 'Test',
         children = [];
 
   //Plugin
   DefinedTag.Plugin()
       : text = 'Plugin',
-        children = [DefinedTag.PVE(),DefinedTag.PVP()];
+        children = [DefinedTag.PVE(), DefinedTag.PVP()];
+
   DefinedTag.PVE()
       : text = 'PVE',
+        children = [DefinedTag.PVETest()];
+
+  DefinedTag.PVETest()
+      : text = 'PVETest',
         children = [];
+
   DefinedTag.PVP()
       : text = 'PVP',
+        children = [];
+
+  DefinedTag.PVPTest()
+      : text = 'PVPTest',
         children = [];
 }

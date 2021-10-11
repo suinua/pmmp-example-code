@@ -35,7 +35,7 @@ class DefinedArticleCategory {
   //Entity
   DefinedArticleCategory.Entity()
       : text = 'Entity',
-        children = [DefinedArticleCategory.Zombie(),DefinedArticleCategory.Projectile()];
+        children = [DefinedArticleCategory.Zombie(), DefinedArticleCategory.Projectile()];
 
   DefinedArticleCategory.Zombie()
       : text = 'Zombie',
