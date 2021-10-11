@@ -73,9 +73,9 @@ void generateHtml(Article fileData, String path) {
     <title>${fileData.title}</title>
     <link rel="stylesheet" href="article.css">
 
-    <script src="js/highlight.min.js"></script>
+    <script src="highlight/highlight.min.js"></script>
     <link rel="stylesheet"
-          href="js/styles/idea.min.css">
+          href="highlight/css/idea.min.css">
     <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>

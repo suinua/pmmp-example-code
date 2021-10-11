@@ -1,4 +1,11 @@
-A simple command-line application.
+# pmmp example code
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+書き方
+```markdown
+親カテゴリ、親カテゴリ:カテゴリ
+タグ1　タグ2　タグ3
+
+# タイトル
+本文
+```
+

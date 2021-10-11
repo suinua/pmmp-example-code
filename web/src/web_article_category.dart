@@ -38,10 +38,18 @@ class DefinedArticleCategory {
   //Entity
   DefinedArticleCategory.Entity()
       : text = 'Entity',
-        children = [DefinedArticleCategory.Zombie()];
+        children = [DefinedArticleCategory.Zombie(),DefinedArticleCategory.ProjectTile()];
 
   DefinedArticleCategory.Zombie()
       : text = 'Zombie',
+        children = [];
+
+  DefinedArticleCategory.ProjectTile()
+      : text = 'ProjectTile',
+        children = [DefinedArticleCategory.Snowball()];
+
+  DefinedArticleCategory.Snowball()
+      : text = 'Snowball',
         children = [];
 
   //Player
