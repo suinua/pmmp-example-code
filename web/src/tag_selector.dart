@@ -1,9 +1,10 @@
-import 'web_tag.dart';
+import 'model/tag.dart';
+import 'view/main_display.dart';
 
 class TagSelector {
   static TagSelector? _instance;
 
-  final List<WebTag> _selectedTagList;
+  final List<Tag> _selectedTagList;
 
   TagSelector._internal() : _selectedTagList = [];
 
@@ -12,17 +13,21 @@ class TagSelector {
     return _instance!;
   }
 
-  void select(WebTag tag) {
+  void select(Tag tag) {
     if (_selectedTagList.contains(tag)) return;
     _selectedTagList.add(tag);
+
+    showArticleThumbnails();
   }
 
-  void deselect(WebTag tag) {
+  void deselect(Tag tag) {
     if (!_selectedTagList.contains(tag)) return;
     _selectedTagList.remove(tag);
+
+    showArticleThumbnails();
   }
 
-  List<WebTag> getSelectedTags() {
+  List<Tag> getSelectedTags() {
     return _selectedTagList;
   }
 }

@@ -3,14 +3,14 @@ import 'dart:html';
 
 import 'package:firebase/firebase.dart' as fb;
 
-import 'web_article.dart';
-import 'web_article_category.dart';
-import 'web_tag.dart';
+import 'model/article.dart';
+import 'model/article_category.dart';
+import 'model/tag.dart';
 
 class ArticleListManager {
   static ArticleListManager? _instance;
 
-  List<WebArticle> _articleList = [];
+  List<Article> _articleList = [];
 
   ArticleListManager._internal();
 
@@ -37,24 +37,27 @@ class ArticleListManager {
 
     var json = jsonDecode(request.response);
 
-    var result = <WebArticle>[];
+    var result = <Article>[];
     json.forEach((_, data) {
-      result.add(WebArticle.fromJson(Map<String, dynamic>.from(data)));
+      result.add(Article.fromJson(Map<String, dynamic>.from(data)));
     });
 
     _articleList = result;
   }
 
-  List<WebArticle> findByTags(List<WebTag> tags) {
-    return _articleList.where((element) => element.hasWebTag(tags)).toList();
-  }
+  List<Article> find(List<Tag> tags, DefinedArticleCategory? defineCategory) {
+    //タグが一致する記事
+    var articles = tags.isEmpty ? _articleList : _articleList.where((element) => element.hasWebTag(tags)).toList();
 
-  List<WebArticle> findByCategory(DefinedArticleCategory DefineCategory) {
-    var category = DefineCategory.toWebArticleCategory();
+    if (defineCategory == null) {
+      return articles;
+    }
 
-    var result = <WebArticle>[];
-    for (var i = 0; i < _articleList.length; i++) {
-      var article = _articleList[i];
+    //カテゴリと一致するものだけをとりだす
+    var category = defineCategory.toArticleCategory();
+    var result = <Article>[];
+    for (var i = 0; i < articles.length; i++) {
+      var article = articles[i];
 
       if (article.category == category) {
         result.add(article);

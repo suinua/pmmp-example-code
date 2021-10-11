@@ -71,12 +71,6 @@ body {
      font-family: 'Be Vietnam Pro', sans-serif;
  }
 
-.tag .tag{
-    font-size: 100%;
-}
-.tag .tag .tag{
-    font-size: 80%;
-}
 
 .category {
     color: #5a5a5a;
@@ -84,11 +78,4 @@ body {
     margin-left: 20px;
     font-size: 150%;
     font-family: 'Be Vietnam Pro', sans-serif;
-}
-
-.category .category{
-    font-size: 100%;
-}
-.category .category .category{
-    font-size: 80%;
 }

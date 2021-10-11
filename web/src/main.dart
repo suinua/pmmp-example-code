@@ -2,8 +2,10 @@ import 'dart:html';
 
 import 'article_list_manager.dart';
 import 'tag_selector.dart';
-import 'web_article_category.dart';
-import 'web_tag.dart';
+import 'model/article_category.dart';
+import 'model/tag.dart';
+import 'view/article_category_view.dart';
+import 'view/tag_view.dart';
 
 
 
@@ -19,12 +21,12 @@ void main() {
 
 void _insertCategoryList() {
   var categoryListHtmlElement = querySelector('.category-list');
-  var elements = DefinedArticleCategory.parentCategories.map((e) => e.toHtmlElement());
+  var elements = DefinedArticleCategory.parentCategories.map((e) => ArticleCategoryView.convert(e));
   categoryListHtmlElement!.children.addAll(elements);
 }
 
 void _insertTagList() {
   var categoryListHtmlElement = querySelector('.tag-list');
-  var elements = DefinedWebTag.parentCategories.map((e) => e.toHtmlElement());
+  var elements = DefinedTag.parentCategories.map((e) => TagView.convert(e));
   categoryListHtmlElement!.children.addAll(elements);
 }

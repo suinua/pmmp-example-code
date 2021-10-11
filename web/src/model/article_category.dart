@@ -1,17 +1,13 @@
-import 'dart:html';
-
-import 'article_list_manager.dart';
-import 'main_display.dart';
-
-class WebArticleCategory {
+//純粋なカテゴリー、カテゴリー名しか持たない
+class ArticleCategory {
   final text;
-  final List<WebArticleCategory> parents;
+  final List<ArticleCategory> parents;
 
-  WebArticleCategory(this.parents, this.text);
+  ArticleCategory(this.parents, this.text);
 
   @override
   bool operator ==(Object other) {
-    if (other is WebArticleCategory) {
+    if (other is ArticleCategory) {
       return text == other.text;
     } else {
       return false;
@@ -19,12 +15,13 @@ class WebArticleCategory {
   }
 }
 
+//定義済みのカテゴリー、カテゴリー名と親のタグを持つ
 class DefinedArticleCategory {
   final text;
   final List<DefinedArticleCategory> children;
 
-  WebArticleCategory toWebArticleCategory() {
-    return WebArticleCategory([], text);
+  ArticleCategory toArticleCategory() {
+    return ArticleCategory([], text);
   }
 
   static List<DefinedArticleCategory> parentCategories = [
@@ -38,14 +35,14 @@ class DefinedArticleCategory {
   //Entity
   DefinedArticleCategory.Entity()
       : text = 'Entity',
-        children = [DefinedArticleCategory.Zombie(),DefinedArticleCategory.ProjectTile()];
+        children = [DefinedArticleCategory.Zombie(),DefinedArticleCategory.Projectile()];
 
   DefinedArticleCategory.Zombie()
       : text = 'Zombie',
         children = [];
 
-  DefinedArticleCategory.ProjectTile()
-      : text = 'ProjectTile',
+  DefinedArticleCategory.Projectile()
+      : text = 'Projectile',
         children = [DefinedArticleCategory.Snowball()];
 
   DefinedArticleCategory.Snowball()
@@ -79,22 +76,5 @@ class DefinedArticleCategory {
     } else {
       return false;
     }
-  }
-
-  HtmlElement toHtmlElement() {
-    var element = DivElement()
-      ..text = text
-      ..className = 'category';
-    element.onClick.listen((event) {
-      querySelectorAll('.category').forEach((e) => e.style.background = '');
-
-      element.style.background = '#7c7c7c';
-      event.stopPropagation();
-      showArticleThumbnails(ArticleListManager().findByCategory(this));
-    });
-    var childrenAsHtml = children.map((e) => e.toHtmlElement()).toList();
-
-    element.children.addAll(childrenAsHtml);
-    return element;
   }
 }
