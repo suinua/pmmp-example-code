@@ -1,4 +1,5 @@
 import 'model/article_category.dart';
+import 'tag_selector.dart';
 import 'view/main_display.dart';
 
 class CategorySelector {
@@ -17,12 +18,16 @@ class CategorySelector {
     _selectedCategory = category;
 
     showArticleThumbnails();
+    TagSelector().refresh();
+    updateTagListView();
   }
 
   void deselect(DefinedArticleCategory category) {
     _selectedCategory = null;
 
     showArticleThumbnails();
+    TagSelector().refresh();
+    updateTagListView();
   }
 
   DefinedArticleCategory? getSelectedTags() {

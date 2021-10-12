@@ -275,6 +275,252 @@
     IterableElementError_noElement: function() {
       return new P.StateError("No element");
     },
+    Sort_sort: function(a, compare, $E) {
+      H.Sort__doSort(a, 0, J.get$length$asx(a) - 1, compare, $E);
+    },
+    Sort__doSort: function(a, left, right, compare, $E) {
+      if (right - left <= 32)
+        H.Sort__insertionSort(a, left, right, compare, $E);
+      else
+        H.Sort__dualPivotQuicksort(a, left, right, compare, $E);
+    },
+    Sort__insertionSort: function(a, left, right, compare, $E) {
+      var i, t1, el, j, t2, j0;
+      for (i = left + 1, t1 = J.getInterceptor$asx(a); i <= right; ++i) {
+        el = t1.$index(a, i);
+        j = i;
+        while (true) {
+          if (j > left) {
+            t2 = compare.call$2(t1.$index(a, j - 1), el);
+            if (typeof t2 !== "number")
+              return t2.$gt();
+            t2 = t2 > 0;
+          } else
+            t2 = false;
+          if (!t2)
+            break;
+          j0 = j - 1;
+          t1.$indexSet(a, j, t1.$index(a, j0));
+          j = j0;
+        }
+        t1.$indexSet(a, j, el);
+      }
+    },
+    Sort__dualPivotQuicksort: function(a, left, right, compare, $E) {
+      var t0, less, great, k, ak, comp, great0, less0, pivots_are_equal,
+        sixth = C.JSInt_methods._tdivFast$1(right - left + 1, 6),
+        index1 = left + sixth,
+        index5 = right - sixth,
+        index3 = C.JSInt_methods._tdivFast$1(left + right, 2),
+        index2 = index3 - sixth,
+        index4 = index3 + sixth,
+        t1 = J.getInterceptor$asx(a),
+        el1 = t1.$index(a, index1),
+        el2 = t1.$index(a, index2),
+        el3 = t1.$index(a, index3),
+        el4 = t1.$index(a, index4),
+        el5 = t1.$index(a, index5),
+        t2 = compare.call$2(el1, el2);
+      if (typeof t2 !== "number")
+        return t2.$gt();
+      if (t2 > 0) {
+        t0 = el2;
+        el2 = el1;
+        el1 = t0;
+      }
+      t2 = compare.call$2(el4, el5);
+      if (typeof t2 !== "number")
+        return t2.$gt();
+      if (t2 > 0) {
+        t0 = el5;
+        el5 = el4;
+        el4 = t0;
+      }
+      t2 = compare.call$2(el1, el3);
+      if (typeof t2 !== "number")
+        return t2.$gt();
+      if (t2 > 0) {
+        t0 = el3;
+        el3 = el1;
+        el1 = t0;
+      }
+      t2 = compare.call$2(el2, el3);
+      if (typeof t2 !== "number")
+        return t2.$gt();
+      if (t2 > 0) {
+        t0 = el3;
+        el3 = el2;
+        el2 = t0;
+      }
+      t2 = compare.call$2(el1, el4);
+      if (typeof t2 !== "number")
+        return t2.$gt();
+      if (t2 > 0) {
+        t0 = el4;
+        el4 = el1;
+        el1 = t0;
+      }
+      t2 = compare.call$2(el3, el4);
+      if (typeof t2 !== "number")
+        return t2.$gt();
+      if (t2 > 0) {
+        t0 = el4;
+        el4 = el3;
+        el3 = t0;
+      }
+      t2 = compare.call$2(el2, el5);
+      if (typeof t2 !== "number")
+        return t2.$gt();
+      if (t2 > 0) {
+        t0 = el5;
+        el5 = el2;
+        el2 = t0;
+      }
+      t2 = compare.call$2(el2, el3);
+      if (typeof t2 !== "number")
+        return t2.$gt();
+      if (t2 > 0) {
+        t0 = el3;
+        el3 = el2;
+        el2 = t0;
+      }
+      t2 = compare.call$2(el4, el5);
+      if (typeof t2 !== "number")
+        return t2.$gt();
+      if (t2 > 0) {
+        t0 = el5;
+        el5 = el4;
+        el4 = t0;
+      }
+      t1.$indexSet(a, index1, el1);
+      t1.$indexSet(a, index3, el3);
+      t1.$indexSet(a, index5, el5);
+      t1.$indexSet(a, index2, t1.$index(a, left));
+      t1.$indexSet(a, index4, t1.$index(a, right));
+      less = left + 1;
+      great = right - 1;
+      if (J.$eq$(compare.call$2(el2, el4), 0)) {
+        for (k = less; k <= great; ++k) {
+          ak = t1.$index(a, k);
+          comp = compare.call$2(ak, el2);
+          if (comp === 0)
+            continue;
+          if (comp < 0) {
+            if (k !== less) {
+              t1.$indexSet(a, k, t1.$index(a, less));
+              t1.$indexSet(a, less, ak);
+            }
+            ++less;
+          } else
+            for (; true;) {
+              comp = compare.call$2(t1.$index(a, great), el2);
+              if (comp > 0) {
+                --great;
+                continue;
+              } else {
+                great0 = great - 1;
+                if (comp < 0) {
+                  t1.$indexSet(a, k, t1.$index(a, less));
+                  less0 = less + 1;
+                  t1.$indexSet(a, less, t1.$index(a, great));
+                  t1.$indexSet(a, great, ak);
+                  great = great0;
+                  less = less0;
+                  break;
+                } else {
+                  t1.$indexSet(a, k, t1.$index(a, great));
+                  t1.$indexSet(a, great, ak);
+                  great = great0;
+                  break;
+                }
+              }
+            }
+        }
+        pivots_are_equal = true;
+      } else {
+        for (k = less; k <= great; ++k) {
+          ak = t1.$index(a, k);
+          if (compare.call$2(ak, el2) < 0) {
+            if (k !== less) {
+              t1.$indexSet(a, k, t1.$index(a, less));
+              t1.$indexSet(a, less, ak);
+            }
+            ++less;
+          } else if (compare.call$2(ak, el4) > 0)
+            for (; true;)
+              if (compare.call$2(t1.$index(a, great), el4) > 0) {
+                --great;
+                if (great < k)
+                  break;
+                continue;
+              } else {
+                great0 = great - 1;
+                if (compare.call$2(t1.$index(a, great), el2) < 0) {
+                  t1.$indexSet(a, k, t1.$index(a, less));
+                  less0 = less + 1;
+                  t1.$indexSet(a, less, t1.$index(a, great));
+                  t1.$indexSet(a, great, ak);
+                  less = less0;
+                } else {
+                  t1.$indexSet(a, k, t1.$index(a, great));
+                  t1.$indexSet(a, great, ak);
+                }
+                great = great0;
+                break;
+              }
+        }
+        pivots_are_equal = false;
+      }
+      t2 = less - 1;
+      t1.$indexSet(a, left, t1.$index(a, t2));
+      t1.$indexSet(a, t2, el2);
+      t2 = great + 1;
+      t1.$indexSet(a, right, t1.$index(a, t2));
+      t1.$indexSet(a, t2, el4);
+      H.Sort__doSort(a, left, less - 2, compare, $E);
+      H.Sort__doSort(a, great + 2, right, compare, $E);
+      if (pivots_are_equal)
+        return;
+      if (less < index1 && great > index5) {
+        for (; J.$eq$(compare.call$2(t1.$index(a, less), el2), 0);)
+          ++less;
+        for (; J.$eq$(compare.call$2(t1.$index(a, great), el4), 0);)
+          --great;
+        for (k = less; k <= great; ++k) {
+          ak = t1.$index(a, k);
+          if (compare.call$2(ak, el2) === 0) {
+            if (k !== less) {
+              t1.$indexSet(a, k, t1.$index(a, less));
+              t1.$indexSet(a, less, ak);
+            }
+            ++less;
+          } else if (compare.call$2(ak, el4) === 0)
+            for (; true;)
+              if (compare.call$2(t1.$index(a, great), el4) === 0) {
+                --great;
+                if (great < k)
+                  break;
+                continue;
+              } else {
+                great0 = great - 1;
+                if (compare.call$2(t1.$index(a, great), el2) < 0) {
+                  t1.$indexSet(a, k, t1.$index(a, less));
+                  less0 = less + 1;
+                  t1.$indexSet(a, less, t1.$index(a, great));
+                  t1.$indexSet(a, great, ak);
+                  less = less0;
+                } else {
+                  t1.$indexSet(a, k, t1.$index(a, great));
+                  t1.$indexSet(a, great, ak);
+                }
+                great = great0;
+                break;
+              }
+        }
+        H.Sort__doSort(a, less, great, compare, $E);
+      } else
+        H.Sort__doSort(a, less, great, compare, $E);
+    },
     LateError: function LateError(t0) {
       this._message = t0;
     },
@@ -5612,51 +5858,29 @@
     }, OnDisconnectJsImpl: function OnDisconnectJsImpl() {
     }, ThenableReferenceJsImpl: function ThenableReferenceJsImpl() {
     }, TransactionJsImpl: function TransactionJsImpl() {
-    }, TagSelector: function TagSelector(t0) {
-      this._selectedTagList = t0;
+    }, TagSelector: function TagSelector(t0, t1) {
+      this._unselectedTagList = t0;
+      this._selectedTagList = t1;
+    }, TagSelector_refresh_closure: function TagSelector_refresh_closure(t0) {
+      this.allTags = t0;
+    }, TagSelector_refresh__closure: function TagSelector_refresh__closure(t0) {
+      this.allTags = t0;
+    }, TagSelector_refresh_closure0: function TagSelector_refresh_closure0() {
     },
-    TagView_convert: function(definedTag, isTopParent) {
-      var t3, ulListElement, t4, childrenAsHtml, childrenWrapElement,
-        t1 = definedTag.text,
-        t2 = document,
-        liElement = t2.createElement("li");
-      C.LIElement_methods.set$text(liElement, t1);
-      liElement.className = "tag";
-      t3 = type$._ElementEventStreamImpl_MouseEvent;
-      t1 = t3._eval$1("~(1)?")._as(new L.TagView_convert_closure(new E.Tag(t1), liElement, definedTag));
+    TagView_convert: function(tag) {
+      var t1, t2,
+        tagElement = document.createElement("div");
+      tagElement.className = "tag";
+      C.DivElement_methods.set$text(tagElement, tag.text);
+      t1 = type$._ElementEventStreamImpl_MouseEvent;
+      t2 = t1._eval$1("~(1)?")._as(new L.TagView_convert_closure(tag, tagElement));
       type$.nullable_void_Function._as(null);
-      W._EventStreamSubscription$(liElement, "click", t1, false, t3._precomputed1);
-      if (isTopParent) {
-        ulListElement = t2.createElement("ul");
-        ulListElement.appendChild(liElement);
-        t1 = definedTag.children;
-        t3 = H._arrayInstanceType(t1);
-        t4 = t3._eval$1("MappedListIterable<1,HtmlElement>");
-        childrenAsHtml = P.List_List$of(new H.MappedListIterable(t1, t3._eval$1("HtmlElement(1)")._as(new L.TagView_convert_closure0()), t4), true, t4._eval$1("ListIterable.E"));
-        childrenWrapElement = t2.createElement("ul");
-        W._ChildrenElementList__addAll(childrenWrapElement, type$.Iterable_Element._as(childrenAsHtml));
-        ulListElement.appendChild(childrenWrapElement);
-        return ulListElement;
-      }
-      t1 = definedTag.children;
-      if (t1.length !== 0) {
-        t3 = H._arrayInstanceType(t1);
-        t4 = t3._eval$1("MappedListIterable<1,HtmlElement>");
-        childrenAsHtml = P.List_List$of(new H.MappedListIterable(t1, t3._eval$1("HtmlElement(1)")._as(new L.TagView_convert_closure1()), t4), true, t4._eval$1("ListIterable.E"));
-        childrenWrapElement = t2.createElement("ul");
-        W._ChildrenElementList__addAll(childrenWrapElement, type$.Iterable_Element._as(childrenAsHtml));
-        liElement.appendChild(childrenWrapElement);
-      }
-      return liElement;
+      W._EventStreamSubscription$(tagElement, "click", t2, false, t1._precomputed1);
+      return tagElement;
     },
-    TagView_convert_closure: function TagView_convert_closure(t0, t1, t2) {
+    TagView_convert_closure: function TagView_convert_closure(t0, t1) {
       this.tag = t0;
-      this.liElement = t1;
-      this.definedTag = t2;
-    },
-    TagView_convert_closure0: function TagView_convert_closure0() {
-    },
-    TagView_convert_closure1: function TagView_convert_closure1() {
+      this.tagElement = t1;
     }
   },
   B = {UserJsImpl: function UserJsImpl() {
@@ -5910,7 +6134,10 @@
       if (_articleListManager == null)
         _articleListManager = $.ArticleListManager__instance = new Z.ArticleListManager(H.setRuntimeTypeInfo([], type$.JSArray_Article));
       t1 = $.TagSelector__instance;
-      t1 == null ? $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], type$.JSArray_Tag)) : t1;
+      if (t1 == null) {
+        t1 = type$.JSArray_Tag;
+        t1 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], t1), H.setRuntimeTypeInfo([], t1));
+      }
       _articleListManager._fetchArticleData$0().then$1$1(0, new F.main_closure(), type$.Null);
     },
     _insertCategoryList: function() {
@@ -5921,19 +6148,9 @@
       categoryListHtmlElement.toString;
       J.get$children$x(categoryListHtmlElement).addAll$1(0, new H.MappedListIterable(t1, t3, t2._eval$1("MappedListIterable<1,HtmlElement>")));
     },
-    _insertTagList: function() {
-      var categoryListHtmlElement = document.querySelector(".tag-list"),
-        t1 = $.$get$DefinedTag_parentCategories(),
-        t2 = H._arrayInstanceType(t1),
-        t3 = t2._eval$1("HtmlElement(1)")._as(new F._insertTagList_closure());
-      categoryListHtmlElement.toString;
-      J.get$children$x(categoryListHtmlElement).addAll$1(0, new H.MappedListIterable(t1, t3, t2._eval$1("MappedListIterable<1,HtmlElement>")));
-    },
     main_closure: function main_closure() {
     },
     _insertCategoryList_closure: function _insertCategoryList_closure() {
-    },
-    _insertTagList_closure: function _insertTagList_closure() {
     }
   },
   Q = {
@@ -5943,8 +6160,10 @@
       if (t1 == null)
         t1 = $.ArticleListManager__instance = new Z.ArticleListManager(H.setRuntimeTypeInfo([], type$.JSArray_Article));
       t2 = $.TagSelector__instance;
-      if (t2 == null)
-        t2 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], type$.JSArray_Tag));
+      if (t2 == null) {
+        t2 = type$.JSArray_Tag;
+        t2 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], t2), H.setRuntimeTypeInfo([], t2));
+      }
       t3 = $.CategorySelector__instance;
       articles = t1.find$2(0, t2._selectedTagList, (t3 == null ? $.CategorySelector__instance = new F.CategorySelector() : t3)._selectedCategory);
       articleListElement = document.querySelector(".article-list");
@@ -5955,14 +6174,39 @@
       t3 = t2._eval$1("MappedListIterable<1,HtmlElement>");
       t1.get$children(articleListElement).addAll$1(0, P.List_List$of(new H.MappedListIterable(articles, t2._eval$1("HtmlElement(1)")._as(new Q.showArticleThumbnails_closure()), t3), true, t3._eval$1("ListIterable.E")));
     },
+    updateTagListView: function() {
+      var t3,
+        t1 = document,
+        t2 = t1.querySelector(".selected-tag-list");
+      t2.toString;
+      J.get$children$x(t2).clear$0(0);
+      t1 = t1.querySelector(".unselected-tag-list");
+      t1.toString;
+      J.get$children$x(t1).clear$0(0);
+      t3 = $.TagSelector__instance;
+      if (t3 == null) {
+        t3 = type$.JSArray_Tag;
+        t3 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], t3), H.setRuntimeTypeInfo([], t3));
+      }
+      C.JSArray_methods.forEach$1(t3._selectedTagList, new Q.updateTagListView_closure(t2));
+      t2 = $.TagSelector__instance;
+      if (t2 == null) {
+        t2 = type$.JSArray_Tag;
+        t2 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], t2), H.setRuntimeTypeInfo([], t2));
+      }
+      C.JSArray_methods.forEach$1(t2._unselectedTagList, new Q.updateTagListView_closure0(t1));
+    },
     showArticleThumbnails_closure: function showArticleThumbnails_closure() {
+    },
+    updateTagListView_closure: function updateTagListView_closure(t0) {
+      this.selectedTagListElement = t0;
+    },
+    updateTagListView_closure0: function updateTagListView_closure0(t0) {
+      this.unselectedTagListElement = t0;
     }
   },
   E = {Tag: function Tag(t0) {
       this.text = t0;
-    }, DefinedTag: function DefinedTag(t0, t1) {
-      this.text = t0;
-      this.children = t1;
     }};
   var holders = [C, H, J, P, W, S, R, O, A, L, B, D, U, T, K, Z, F, Q, E];
   hunkHelpers.setFunctionNamesIfNecessary(holders);
@@ -6295,6 +6539,15 @@
     indexOf$1: function($receiver, pattern) {
       return this.indexOf$2($receiver, pattern, 0);
     },
+    compareTo$1: function(receiver, other) {
+      var t1;
+      H._asString(other);
+      if (receiver === other)
+        t1 = 0;
+      else
+        t1 = receiver < other ? -1 : 1;
+      return t1;
+    },
     toString$0: function(receiver) {
       return receiver;
     },
@@ -6341,7 +6594,7 @@
       t1._asyncComplete$1(null);
       return t1;
     },
-    $signature: 20
+    $signature: 14
   };
   H.EfficientLengthIterable.prototype = {};
   H.ListIterable.prototype = {
@@ -6779,19 +7032,19 @@
     call$1: function(o) {
       return this.getTag(o);
     },
-    $signature: 13
+    $signature: 28
   };
   H.initHooks_closure0.prototype = {
     call$2: function(o, tag) {
       return this.getUnknownTag(o, tag);
     },
-    $signature: 14
+    $signature: 25
   };
   H.initHooks_closure1.prototype = {
     call$1: function(tag) {
       return this.prototypeForTag(H._asString(tag));
     },
-    $signature: 29
+    $signature: 39
   };
   H.NativeTypedData.prototype = {};
   H.NativeTypedArray.prototype = {
@@ -6907,7 +7160,7 @@
       t1.storedCallback = null;
       f.call$0();
     },
-    $signature: 9
+    $signature: 6
   };
   P._AsyncRun__initializeScheduleImmediate_closure.prototype = {
     call$1: function(callback) {
@@ -6917,19 +7170,19 @@
       t2 = this.span;
       t1.firstChild ? t1.removeChild(t2) : t1.appendChild(t2);
     },
-    $signature: 36
+    $signature: 33
   };
   P._AsyncRun__scheduleImmediateJsOverride_internalCallback.prototype = {
     call$0: function() {
       this.callback.call$0();
     },
-    $signature: 12
+    $signature: 8
   };
   P._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback.prototype = {
     call$0: function() {
       this.callback.call$0();
     },
-    $signature: 12
+    $signature: 8
   };
   P._TimerImpl.prototype = {
     _TimerImpl$2: function(milliseconds, callback) {
@@ -6980,13 +7233,13 @@
     call$2: function(error, stackTrace) {
       this.bodyFunction.call$2(1, new H.ExceptionAndStackTrace(error, type$.StackTrace._as(stackTrace)));
     },
-    $signature: 15
+    $signature: 27
   };
   P._wrapJsFunctionForAsync_closure.prototype = {
     call$2: function(errorCode, result) {
       this.$protected(H._asInt(errorCode), result);
     },
-    $signature: 16
+    $signature: 23
   };
   P.AsyncError.prototype = {
     toString$0: function(_) {
@@ -7238,7 +7491,7 @@
         t1._completeError$2(error, stackTrace);
       }
     },
-    $signature: 9
+    $signature: 6
   };
   P._Future__chainForeignFuture_closure0.prototype = {
     call$2: function(error, stackTrace) {
@@ -7309,7 +7562,7 @@
     call$1: function(_) {
       return this.originalSource;
     },
-    $signature: 19
+    $signature: 13
   };
   P._Future__propagateToListeners_handleValueCallback.prototype = {
     call$0: function() {
@@ -7403,7 +7656,7 @@
   P.Stream_forEach__closure0.prototype = {
     call$1: function(_) {
     },
-    $signature: 6
+    $signature: 11
   };
   P.Stream_length_closure.prototype = {
     call$1: function(_) {
@@ -7433,7 +7686,7 @@
     call$2: function(error, stackTrace) {
       P._cancelAndError(this.subscription, this.future, error, type$.StackTrace._as(stackTrace));
     },
-    $signature: 21
+    $signature: 15
   };
   P._Zone.prototype = {$isZone: 1};
   P._rootHandleUncaughtError_closure.prototype = {
@@ -7529,7 +7782,7 @@
     call$2: function(k, v) {
       this.result.$indexSet(0, this.K._as(k), this.V._as(v));
     },
-    $signature: 22
+    $signature: 16
   };
   P.ListBase.prototype = {$isIterable: 1, $isList: 1};
   P.ListMixin.prototype = {
@@ -7589,7 +7842,7 @@
       t1._contents = t2 + ": ";
       t1._contents += H.S(v);
     },
-    $signature: 23
+    $signature: 17
   };
   P.MapMixin.prototype = {
     forEach$1: function(receiver, action) {
@@ -7712,7 +7965,7 @@
       }
       return null;
     },
-    $signature: 7
+    $signature: 12
   };
   P.Utf8Decoder__decoderNonfatal_closure.prototype = {
     call$0: function() {
@@ -7725,7 +7978,7 @@
       }
       return null;
     },
-    $signature: 7
+    $signature: 12
   };
   P.Base64Codec.prototype = {
     normalize$3: function(_, source, start, end) {
@@ -8302,7 +8555,7 @@
     call$2: function(msg, position) {
       throw H.wrapException(P.FormatException$("Illegal IPv4 address, " + msg, this.host, position));
     },
-    $signature: 24
+    $signature: 19
   };
   P.Uri_parseIPv6Address_error.prototype = {
     call$2: function(msg, position) {
@@ -8311,7 +8564,7 @@
     call$1: function(msg) {
       return this.call$2(msg, null);
     },
-    $signature: 25
+    $signature: 20
   };
   P.Uri_parseIPv6Address_parseHex.prototype = {
     call$2: function(start, end) {
@@ -8323,7 +8576,7 @@
         this.error.call$2("each part must be in the range of `0x0..0xFFFF`", start);
       return value;
     },
-    $signature: 26
+    $signature: 42
   };
   P._Uri.prototype = {
     get$_text: function() {
@@ -8502,7 +8755,7 @@
       C.NativeUint8List_methods.fillRange$3(t1, 0, 96, defaultTransition);
       return t1;
     },
-    $signature: 27
+    $signature: 22
   };
   P._createTables_setChars.prototype = {
     call$3: function(target, chars, transition) {
@@ -8514,7 +8767,7 @@
         target[t2] = transition;
       }
     },
-    $signature: 8
+    $signature: 10
   };
   P._createTables_setRange.prototype = {
     call$3: function(target, range, transition) {
@@ -8526,7 +8779,7 @@
         target[t1] = transition;
       }
     },
-    $signature: 8
+    $signature: 10
   };
   P._SimpleUri.prototype = {
     get$hasAuthority: function() {
@@ -8811,6 +9064,10 @@
         return H.ioore(t1, index);
       this._element.replaceChild(value, t1[index]);
     },
+    add$1: function(_, value) {
+      this._element.appendChild(value);
+      return value;
+    },
     get$iterator: function(_) {
       var t1 = this.toList$0(this);
       return new J.ArrayIterator(t1, t1.length, H._arrayInstanceType(t1)._eval$1("ArrayIterator<1>"));
@@ -8967,7 +9224,7 @@
       else
         t3.completeError$1(e);
     },
-    $signature: 28
+    $signature: 24
   };
   W.HttpRequestEventTarget.prototype = {};
   W.LIElement.prototype = {};
@@ -9097,6 +9354,11 @@
     }
   };
   W.Node.prototype = {
+    remove$0: function(receiver) {
+      var t1 = receiver.parentNode;
+      if (t1 != null)
+        t1.removeChild(receiver);
+    },
     replaceWith$1: function(receiver, otherNode) {
       var $parent, t1, exception;
       try {
@@ -9303,7 +9565,7 @@
     call$2: function(k, v) {
       return C.JSArray_methods.add$1(this.keys, k);
     },
-    $signature: 40
+    $signature: 26
   };
   W.StyleSheet.prototype = {$isStyleSheet: 1};
   W.TextTrack.prototype = {$isTextTrack: 1};
@@ -9652,13 +9914,13 @@
     call$1: function(e) {
       return this.onData.call$1(type$.Event._as(e));
     },
-    $signature: 10
+    $signature: 9
   };
   W._EventStreamSubscription_onData_closure.prototype = {
     call$1: function(e) {
       return this.handleData.call$1(type$.Event._as(e));
     },
-    $signature: 10
+    $signature: 9
   };
   W.ImmutableListMixin.prototype = {
     get$iterator: function(receiver) {
@@ -9806,7 +10068,7 @@
       J.$indexSet$ax(t1, key, t2);
       return t2;
     },
-    $signature: 30
+    $signature: 35
   };
   P._AcceptStructuredCloneDart2Js.prototype = {
     forEachJsField$2: function(object, action) {
@@ -9835,6 +10097,9 @@
       t1 = this.get$_html_common$_iterable();
       J.replaceWith$1$x(t1._f.call$1(t1.__internal$_iterable.elementAt$1(0, index)), value);
     },
+    add$1: function(_, value) {
+      this._childNodes._this.appendChild(value);
+    },
     addAll$1: function(_, iterable) {
       var t1, t2;
       for (t1 = J.get$iterator$ax(type$.Iterable_Element._as(iterable)), t2 = this._childNodes._this; t1.moveNext$0();)
@@ -9862,13 +10127,13 @@
     call$1: function(n) {
       return type$.Element._is(type$.Node._as(n));
     },
-    $signature: 31
+    $signature: 29
   };
   P.FilteredElementList__iterable_closure0.prototype = {
     call$1: function(n) {
       return type$.Element._as(type$.Node._as(n));
     },
-    $signature: 32
+    $signature: 30
   };
   P.NullRejectionException.prototype = {
     toString$0: function(_) {
@@ -10222,13 +10487,13 @@
     call$1: function(e) {
       return new Z.ArticleCategory(H._asString(e), H.setRuntimeTypeInfo([], type$.JSArray_ArticleCategory));
     },
-    $signature: 33
+    $signature: 31
   };
   T.Article$fromJson_closure0.prototype = {
     call$1: function(element) {
       return new E.Tag(H._asString(element));
     },
-    $signature: 34
+    $signature: 32
   };
   Z.ArticleCategory.prototype = {
     $eq: function(_, other) {
@@ -10267,8 +10532,15 @@
         t1 = $.CategorySelector__instance = new F.CategorySelector();
       t1._selectedCategory = this.articleCategory;
       Q.showArticleThumbnails();
+      t1 = $.TagSelector__instance;
+      if (t1 == null) {
+        t1 = type$.JSArray_Tag;
+        t1 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], t1), H.setRuntimeTypeInfo([], t1));
+      }
+      t1.refresh$0(0);
+      Q.updateTagListView();
     },
-    $signature: 11
+    $signature: 7
   };
   K.ArticleCategoryView_convert__closure.prototype = {
     call$1: function(e) {
@@ -10276,19 +10548,19 @@
       t1.background = "";
       return "";
     },
-    $signature: 35
+    $signature: 34
   };
   K.ArticleCategoryView_convert_closure0.prototype = {
     call$1: function(e) {
       return K.ArticleCategoryView_convert(type$.DefinedArticleCategory._as(e), false);
     },
-    $signature: 5
+    $signature: 2
   };
   K.ArticleCategoryView_convert_closure1.prototype = {
     call$1: function(e) {
       return K.ArticleCategoryView_convert(type$.DefinedArticleCategory._as(e), false);
     },
-    $signature: 5
+    $signature: 2
   };
   Z.ArticleListManager.prototype = {
     _fetchArticleData$0: function() {
@@ -10376,31 +10648,24 @@
     call$2: function(_, data) {
       C.JSArray_methods.add$1(this.result, T.Article$fromJson(P.LinkedHashMap_LinkedHashMap$from(type$.Map_dynamic_dynamic._as(data), type$.String, type$.dynamic)));
     },
-    $signature: 37
+    $signature: 36
   };
   Z.ArticleListManager_find_closure.prototype = {
     call$1: function(element) {
       return type$.Article._as(element).hasWebTag$1(this.tags);
     },
-    $signature: 38
+    $signature: 37
   };
   F.CategorySelector.prototype = {};
   F.main_closure.prototype = {
     call$1: function(_) {
       F._insertCategoryList();
-      F._insertTagList();
     },
-    $signature: 6
+    $signature: 11
   };
   F._insertCategoryList_closure.prototype = {
     call$1: function(e) {
       return K.ArticleCategoryView_convert(type$.DefinedArticleCategory._as(e), true);
-    },
-    $signature: 5
-  };
-  F._insertTagList_closure.prototype = {
-    call$1: function(e) {
-      return L.TagView_convert(type$.DefinedTag._as(e), true);
     },
     $signature: 2
   };
@@ -10421,7 +10686,21 @@
       W._ChildrenElementList__addAll(e, type$.Iterable_Element._as(H.setRuntimeTypeInfo([titleElement, conciseBodyElement], type$.JSArray_Element)));
       return e;
     },
-    $signature: 39
+    $signature: 38
+  };
+  Q.updateTagListView_closure.prototype = {
+    call$1: function(selectedTag) {
+      type$.Tag._as(selectedTag);
+      J.get$children$x(this.selectedTagListElement).add$1(0, L.TagView_convert(selectedTag));
+    },
+    $signature: 5
+  };
+  Q.updateTagListView_closure0.prototype = {
+    call$1: function(unselectedTag) {
+      type$.Tag._as(unselectedTag);
+      J.get$children$x(this.unselectedTagListElement).add$1(0, L.TagView_convert(unselectedTag));
+    },
+    $signature: 5
   };
   E.Tag.prototype = {
     $eq: function(_, other) {
@@ -10433,13 +10712,37 @@
         return false;
     }
   };
-  E.DefinedTag.prototype = {};
   L.TagSelector.prototype = {
+    refresh$0: function(_) {
+      var t2, t3, t4, articles, allTags, i, selectedTag,
+        t1 = $.ArticleListManager__instance;
+      if (t1 == null)
+        t1 = $.ArticleListManager__instance = new Z.ArticleListManager(H.setRuntimeTypeInfo([], type$.JSArray_Article));
+      t2 = type$.JSArray_Tag;
+      t3 = H.setRuntimeTypeInfo([], t2);
+      t4 = $.CategorySelector__instance;
+      articles = t1.find$2(0, t3, (t4 == null ? $.CategorySelector__instance = new F.CategorySelector() : t4)._selectedCategory);
+      allTags = H.setRuntimeTypeInfo([], t2);
+      C.JSArray_methods.forEach$1(articles, new L.TagSelector_refresh_closure(allTags));
+      t1 = type$.nullable_int_Function_Tag_Tag._as(new L.TagSelector_refresh_closure0());
+      if (!!allTags.immutable$list)
+        H.throwExpression(P.UnsupportedError$("sort"));
+      H.Sort_sort(allTags, t1, type$.Tag);
+      this.set$_unselectedTagList(allTags);
+      for (t1 = this._selectedTagList, i = 0; i < t1.length; ++i) {
+        selectedTag = t1[i];
+        if (C.JSArray_methods.contains$1(allTags, selectedTag))
+          C.JSArray_methods.remove$1(this._unselectedTagList, selectedTag);
+        else
+          C.JSArray_methods.remove$1(t1, selectedTag);
+      }
+    },
     select$1: function(_, tag) {
       var t1 = this._selectedTagList;
       if (C.JSArray_methods.contains$1(t1, tag))
         return;
       C.JSArray_methods.add$1(t1, tag);
+      C.JSArray_methods.remove$1(this._unselectedTagList, tag);
       Q.showArticleThumbnails();
     },
     deselect$1: function(tag) {
@@ -10447,44 +10750,72 @@
       if (!C.JSArray_methods.contains$1(t1, tag))
         return;
       C.JSArray_methods.remove$1(t1, tag);
+      C.JSArray_methods.add$1(this._unselectedTagList, tag);
       Q.showArticleThumbnails();
+    },
+    set$_unselectedTagList: function(_unselectedTagList) {
+      this._unselectedTagList = type$.List_Tag._as(_unselectedTagList);
     }
+  };
+  L.TagSelector_refresh_closure.prototype = {
+    call$1: function(article) {
+      C.JSArray_methods.forEach$1(type$.Article._as(article).tags, new L.TagSelector_refresh__closure(this.allTags));
+    },
+    $signature: 40
+  };
+  L.TagSelector_refresh__closure.prototype = {
+    call$1: function(tag) {
+      var t1;
+      type$.Tag._as(tag);
+      t1 = this.allTags;
+      if (!C.JSArray_methods.contains$1(t1, tag))
+        C.JSArray_methods.add$1(t1, tag);
+    },
+    $signature: 5
+  };
+  L.TagSelector_refresh_closure0.prototype = {
+    call$2: function(a, b) {
+      var t1 = type$.Tag;
+      return C.JSString_methods.compareTo$1(t1._as(a).text, t1._as(b).text);
+    },
+    $signature: 41
   };
   L.TagView_convert_closure.prototype = {
     call$1: function($event) {
-      var t1, t2, _this = this;
-      type$.MouseEvent._as($event).stopPropagation();
+      var t1, t2, t3, unselectedListHtmlElement, selectedListHtmlElement;
+      type$.MouseEvent._as($event);
       t1 = $.TagSelector__instance;
-      if (t1 == null)
-        t1 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], type$.JSArray_Tag));
-      t2 = _this.tag;
+      if (t1 == null) {
+        t1 = type$.JSArray_Tag;
+        t1 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], t1), H.setRuntimeTypeInfo([], t1));
+      }
+      t2 = this.tag;
+      t3 = this.tagElement;
       if (C.JSArray_methods.contains$1(t1._selectedTagList, t2)) {
+        C.DivElement_methods.remove$0(t3);
+        unselectedListHtmlElement = document.querySelector(".unselected-tag-list");
+        unselectedListHtmlElement.toString;
+        J.get$children$x(unselectedListHtmlElement).add$1(0, t3);
         t1 = $.TagSelector__instance;
-        (t1 == null ? $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], type$.JSArray_Tag)) : t1).deselect$1(t2);
-        t1 = _this.liElement.style;
-        t1.background = "";
+        if (t1 == null) {
+          t1 = type$.JSArray_Tag;
+          t1 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], t1), H.setRuntimeTypeInfo([], t1));
+        }
+        t1.deselect$1(t2);
       } else {
+        C.DivElement_methods.remove$0(t3);
+        selectedListHtmlElement = document.querySelector(".selected-tag-list");
+        selectedListHtmlElement.toString;
+        J.get$children$x(selectedListHtmlElement).add$1(0, t3);
         t1 = $.TagSelector__instance;
-        if (t1 == null)
-          t1 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], type$.JSArray_Tag));
-        t1.select$1(0, new E.Tag(_this.definedTag.text));
-        t1 = _this.liElement.style;
-        t1.background = "#7c7c7c";
+        if (t1 == null) {
+          t1 = type$.JSArray_Tag;
+          t1 = $.TagSelector__instance = new L.TagSelector(H.setRuntimeTypeInfo([], t1), H.setRuntimeTypeInfo([], t1));
+        }
+        t1.select$1(0, t2);
       }
     },
-    $signature: 11
-  };
-  L.TagView_convert_closure0.prototype = {
-    call$1: function(e) {
-      return L.TagView_convert(type$.DefinedTag._as(e), false);
-    },
-    $signature: 2
-  };
-  L.TagView_convert_closure1.prototype = {
-    call$1: function(e) {
-      return L.TagView_convert(type$.DefinedTag._as(e), false);
-    },
-    $signature: 2
+    $signature: 7
   };
   (function aliases() {
     var _ = J.Interceptor.prototype;
@@ -10500,14 +10831,14 @@
     _static_1(P, "async__AsyncRun__scheduleImmediateWithSetImmediate$closure", "_AsyncRun__scheduleImmediateWithSetImmediate", 4);
     _static_1(P, "async__AsyncRun__scheduleImmediateWithTimer$closure", "_AsyncRun__scheduleImmediateWithTimer", 4);
     _static_0(P, "async___startMicrotaskLoop$closure", "_startMicrotaskLoop", 0);
-    _instance(P._Completer.prototype, "get$completeError", 0, 1, null, ["call$2", "call$1"], ["completeError$2", "completeError$1"], 17, 0);
+    _instance(P._Completer.prototype, "get$completeError", 0, 1, null, ["call$2", "call$1"], ["completeError$2", "completeError$1"], 21, 0);
   })();
   (function inheritance() {
     var _mixin = hunkHelpers.mixin,
       _inherit = hunkHelpers.inherit,
       _inheritMany = hunkHelpers.inheritMany;
     _inherit(P.Object, null);
-    _inheritMany(P.Object, [H.JS_CONST, J.Interceptor, J.ArrayIterator, P.Error, P._ListBase_Object_ListMixin, H.Closure, P.Iterable, H.ListIterator, P.Iterator, H.FixedLengthListMixin, H.UnmodifiableListMixin, H.TypeErrorDecoder, H.NullThrownFromJavaScriptException, H.ExceptionAndStackTrace, H._StackTrace, P.MapMixin, H.LinkedHashMapCell, H.LinkedHashMapKeyIterator, H.Rti, H._FunctionParameters, P._TimerImpl, P._AsyncAwaitCompleter, P.AsyncError, P._Completer, P._FutureListener, P._Future, P._AsyncCallbackEntry, P.Stream, P.StreamSubscription, P.StreamTransformerBase, P._StreamIterator, P._Zone, P.ListMixin, P.Codec, P._Utf8Decoder, P.DateTime, P.OutOfMemoryError, P.StackOverflowError, P._Exception, P.FormatException, P.Expando, P.Null, P._StringStackTrace, P.StringBuffer, P._Uri, P.UriData, P._SimpleUri, W.CssStyleDeclarationBase, W.EventStreamProvider, W.ImmutableListMixin, W.FixedSizeListIterator, P._AcceptStructuredClone, P.NullRejectionException, K.JsObjectWrapper, K.FirebaseJsNotLoadedException, T.Article, Z.ArticleCategory, Z.DefinedArticleCategory, Z.ArticleListManager, F.CategorySelector, E.Tag, E.DefinedTag, L.TagSelector]);
+    _inheritMany(P.Object, [H.JS_CONST, J.Interceptor, J.ArrayIterator, P.Error, P._ListBase_Object_ListMixin, H.Closure, P.Iterable, H.ListIterator, P.Iterator, H.FixedLengthListMixin, H.UnmodifiableListMixin, H.TypeErrorDecoder, H.NullThrownFromJavaScriptException, H.ExceptionAndStackTrace, H._StackTrace, P.MapMixin, H.LinkedHashMapCell, H.LinkedHashMapKeyIterator, H.Rti, H._FunctionParameters, P._TimerImpl, P._AsyncAwaitCompleter, P.AsyncError, P._Completer, P._FutureListener, P._Future, P._AsyncCallbackEntry, P.Stream, P.StreamSubscription, P.StreamTransformerBase, P._StreamIterator, P._Zone, P.ListMixin, P.Codec, P._Utf8Decoder, P.DateTime, P.OutOfMemoryError, P.StackOverflowError, P._Exception, P.FormatException, P.Expando, P.Null, P._StringStackTrace, P.StringBuffer, P._Uri, P.UriData, P._SimpleUri, W.CssStyleDeclarationBase, W.EventStreamProvider, W.ImmutableListMixin, W.FixedSizeListIterator, P._AcceptStructuredClone, P.NullRejectionException, K.JsObjectWrapper, K.FirebaseJsNotLoadedException, T.Article, Z.ArticleCategory, Z.DefinedArticleCategory, Z.ArticleListManager, F.CategorySelector, E.Tag, L.TagSelector]);
     _inheritMany(J.Interceptor, [J.JSBool, J.JSNull, J.JavaScriptObject, J.JSArray, J.JSNumber, J.JSString, H.NativeTypedData, W.EventTarget, W.AccessibleNodeList, W.Blob, W.CssTransformComponent, W.CssRule, W._CssStyleDeclaration_Interceptor_CssStyleDeclarationBase, W.CssStyleValue, W.DataTransferItemList, W.DomException, W._DomRectList_Interceptor_ListMixin, W.DomRectReadOnly, W._DomStringList_Interceptor_ListMixin, W.DomTokenList, W.Event, W._FileList_Interceptor_ListMixin, W.FontFace, W.Gamepad, W.History, W._HtmlCollection_Interceptor_ListMixin, W.Location, W.MediaList, W._MidiInputMap_Interceptor_MapMixin, W._MidiOutputMap_Interceptor_MapMixin, W.MimeType, W._MimeTypeArray_Interceptor_ListMixin, W._NodeList_Interceptor_ListMixin, W.Plugin, W._PluginArray_Interceptor_ListMixin, W._RtcStatsReport_Interceptor_MapMixin, W.SpeechGrammar, W._SpeechGrammarList_Interceptor_ListMixin, W.SpeechRecognitionResult, W._Storage_Interceptor_MapMixin, W.StyleSheet, W._TextTrackCueList_Interceptor_ListMixin, W.TimeRanges, W.Touch, W._TouchList_Interceptor_ListMixin, W.TrackDefaultList, W.Url, W.__CssRuleList_Interceptor_ListMixin, W.__GamepadList_Interceptor_ListMixin, W.__NamedNodeMap_Interceptor_ListMixin, W.__SpeechRecognitionResultList_Interceptor_ListMixin, W.__StyleSheetList_Interceptor_ListMixin, P.Length, P._LengthList_Interceptor_ListMixin, P.Number, P._NumberList_Interceptor_ListMixin, P.PointList, P._StringList_Interceptor_ListMixin, P.Transform, P._TransformList_Interceptor_ListMixin, P.AudioBuffer, P._AudioParamMap_Interceptor_MapMixin, P._SqlResultSetRowList_Interceptor_ListMixin]);
     _inheritMany(J.JavaScriptObject, [J.PlainJavaScriptObject, J.UnknownJavaScriptObject, J.JavaScriptFunction, R.AnalyticsJsImpl, R.AnalyticsCallOptionsJsImpl, O.AppJsImpl, A.AuthJsImpl, A.Persistence, A.AuthCredential, A.AuthProviderJsImpl, A.ApplicationVerifierJsImpl, A.ConfirmationResultJsImpl, A.ActionCodeInfo, A.UserMetadata, A.AuthError, A.ActionCodeEmail, A.ActionCodeSettings, A.IosSettings, A.AndroidSettings, A.UserCredentialJsImpl, A.AdditionalUserInfoJsImpl, L.ServerValue, L.DatabaseJsImpl, L.QueryJsImpl, L.DataSnapshotJsImpl, L.OnDisconnectJsImpl, L.TransactionJsImpl, A.PromiseJsImpl, B.UserInfoJsImpl, B.IdTokenResultImpl, B.FirebaseError, B.UserProfile, B.FirebaseOptions, D.FirestoreJsImpl, D.PersistenceSettings, D.WriteBatchJsImpl, D.QueryJsImpl0, D.FieldPath, D.GeoPoint, D.Blob0, D.DocumentChangeJsImpl, D.DocumentReferenceJsImpl, D.DocumentSnapshotJsImpl, D.FieldValue, D.QuerySnapshotJsImpl, D.TransactionJsImpl0, D.TimestampJsImpl, D.FirestoreError, D.SnapshotListenOptions, D.Settings, D.SnapshotMetadata, D.DocumentListenOptions, D.SetOptions, U.FunctionsJsImpl, U.HttpsCallableJsImpl, U.HttpsCallableOptions, U.HttpsCallableResultJsImpl, U.HttpsErrorJsImpl, U.ErrorJsImpl, T.MessagingJsImpl, T.NotificationJsImpl, T.PayloadJsImpl, D.PerformanceJsImpl, D.TraceJsImpl, D.RemoteConfigJsImpl, D.ValueJsImpl, D.SettingsJsImpl, B.StorageJsImpl, B.ReferenceJsImpl0, B.SettableMetadataJsImpl, B.UploadTaskJsImpl, B.UploadTaskSnapshotJsImpl, B.ListOptionsJsImpl, B.ListResultJsImpl, B.StringFormat, B.TaskEvent]);
     _inherit(J.JSUnmodifiableArray, J.JSArray);
@@ -10516,7 +10847,7 @@
     _inherit(P.ListBase, P._ListBase_Object_ListMixin);
     _inheritMany(P.ListBase, [H.UnmodifiableListBase, W._ChildrenElementList, W._FrozenElementList, W._ChildNodeListLazy, P.FilteredElementList]);
     _inherit(H.CodeUnits, H.UnmodifiableListBase);
-    _inheritMany(H.Closure, [H.nullFuture_closure, H.TearOffClosure, H.initHooks_closure, H.initHooks_closure0, H.initHooks_closure1, P._AsyncRun__initializeScheduleImmediate_internalCallback, P._AsyncRun__initializeScheduleImmediate_closure, P._AsyncRun__scheduleImmediateJsOverride_internalCallback, P._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, P._TimerImpl_internalCallback, P._awaitOnObject_closure, P._awaitOnObject_closure0, P._wrapJsFunctionForAsync_closure, P._Future__addListener_closure, P._Future__prependListeners_closure, P._Future__chainForeignFuture_closure, P._Future__chainForeignFuture_closure0, P._Future__chainForeignFuture_closure1, P._Future__asyncCompleteWithValue_closure, P._Future__chainFuture_closure, P._Future__asyncCompleteError_closure, P._Future__propagateToListeners_handleWhenCompleteCallback, P._Future__propagateToListeners_handleWhenCompleteCallback_closure, P._Future__propagateToListeners_handleValueCallback, P._Future__propagateToListeners_handleError, P.Stream_forEach_closure, P.Stream_forEach_closure0, P.Stream_forEach__closure, P.Stream_forEach__closure0, P.Stream_length_closure, P.Stream_length_closure0, P._cancelAndError_closure, P._cancelAndErrorClosure_closure, P._rootHandleUncaughtError_closure, P._RootZone_bindCallbackGuarded_closure, P._RootZone_bindUnaryCallbackGuarded_closure, P.LinkedHashMap_LinkedHashMap$from_closure, P.MapBase_mapToString_closure, P.Utf8Decoder__decoder_closure, P.Utf8Decoder__decoderNonfatal_closure, P.Uri__parseIPv4Address_error, P.Uri_parseIPv6Address_error, P.Uri_parseIPv6Address_parseHex, P._createTables_build, P._createTables_setChars, P._createTables_setRange, W.HttpRequest_request_closure, W.MidiInputMap_keys_closure, W.MidiOutputMap_keys_closure, W.RtcStatsReport_keys_closure, W.Storage_keys_closure, W._EventStreamSubscription_closure, W._EventStreamSubscription_onData_closure, P._AcceptStructuredClone_walk_closure, P.FilteredElementList__iterable_closure, P.FilteredElementList__iterable_closure0, P.promiseToFuture_closure, P.promiseToFuture_closure0, P.AudioParamMap_keys_closure, T.Article$fromJson_closure, T.Article$fromJson_closure0, K.ArticleCategoryView_convert_closure, K.ArticleCategoryView_convert__closure, K.ArticleCategoryView_convert_closure0, K.ArticleCategoryView_convert_closure1, Z.ArticleListManager__fetchArticleData_closure, Z.ArticleListManager_find_closure, F.main_closure, F._insertCategoryList_closure, F._insertTagList_closure, Q.showArticleThumbnails_closure, L.TagView_convert_closure, L.TagView_convert_closure0, L.TagView_convert_closure1]);
+    _inheritMany(H.Closure, [H.nullFuture_closure, H.TearOffClosure, H.initHooks_closure, H.initHooks_closure0, H.initHooks_closure1, P._AsyncRun__initializeScheduleImmediate_internalCallback, P._AsyncRun__initializeScheduleImmediate_closure, P._AsyncRun__scheduleImmediateJsOverride_internalCallback, P._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, P._TimerImpl_internalCallback, P._awaitOnObject_closure, P._awaitOnObject_closure0, P._wrapJsFunctionForAsync_closure, P._Future__addListener_closure, P._Future__prependListeners_closure, P._Future__chainForeignFuture_closure, P._Future__chainForeignFuture_closure0, P._Future__chainForeignFuture_closure1, P._Future__asyncCompleteWithValue_closure, P._Future__chainFuture_closure, P._Future__asyncCompleteError_closure, P._Future__propagateToListeners_handleWhenCompleteCallback, P._Future__propagateToListeners_handleWhenCompleteCallback_closure, P._Future__propagateToListeners_handleValueCallback, P._Future__propagateToListeners_handleError, P.Stream_forEach_closure, P.Stream_forEach_closure0, P.Stream_forEach__closure, P.Stream_forEach__closure0, P.Stream_length_closure, P.Stream_length_closure0, P._cancelAndError_closure, P._cancelAndErrorClosure_closure, P._rootHandleUncaughtError_closure, P._RootZone_bindCallbackGuarded_closure, P._RootZone_bindUnaryCallbackGuarded_closure, P.LinkedHashMap_LinkedHashMap$from_closure, P.MapBase_mapToString_closure, P.Utf8Decoder__decoder_closure, P.Utf8Decoder__decoderNonfatal_closure, P.Uri__parseIPv4Address_error, P.Uri_parseIPv6Address_error, P.Uri_parseIPv6Address_parseHex, P._createTables_build, P._createTables_setChars, P._createTables_setRange, W.HttpRequest_request_closure, W.MidiInputMap_keys_closure, W.MidiOutputMap_keys_closure, W.RtcStatsReport_keys_closure, W.Storage_keys_closure, W._EventStreamSubscription_closure, W._EventStreamSubscription_onData_closure, P._AcceptStructuredClone_walk_closure, P.FilteredElementList__iterable_closure, P.FilteredElementList__iterable_closure0, P.promiseToFuture_closure, P.promiseToFuture_closure0, P.AudioParamMap_keys_closure, T.Article$fromJson_closure, T.Article$fromJson_closure0, K.ArticleCategoryView_convert_closure, K.ArticleCategoryView_convert__closure, K.ArticleCategoryView_convert_closure0, K.ArticleCategoryView_convert_closure1, Z.ArticleListManager__fetchArticleData_closure, Z.ArticleListManager_find_closure, F.main_closure, F._insertCategoryList_closure, Q.showArticleThumbnails_closure, Q.updateTagListView_closure, Q.updateTagListView_closure0, L.TagSelector_refresh_closure, L.TagSelector_refresh__closure, L.TagSelector_refresh_closure0, L.TagView_convert_closure]);
     _inheritMany(P.Iterable, [H.EfficientLengthIterable, H.MappedIterable, H.WhereIterable]);
     _inheritMany(H.EfficientLengthIterable, [H.ListIterable, H.LinkedHashMapKeyIterable]);
     _inheritMany(P.Iterator, [H.MappedIterator, H.WhereIterator]);
@@ -10681,7 +11012,7 @@
     mangledNames: {},
     getTypeFromName: getGlobalFromName,
     metadata: [],
-    types: ["~()", "~(String,@)", "HtmlElement(DefinedTag)", "~(@)", "~(~())", "HtmlElement(DefinedArticleCategory)", "Null(~)", "@()", "~(Uint8List,String,int)", "Null(@)", "~(Event)", "~(MouseEvent)", "Null()", "@(@)", "@(@,String)", "Null(@,StackTrace)", "~(int,@)", "~(Object[StackTrace?])", "Null(Object,StackTrace)", "_Future<@>(@)", "Future<Null>()", "~(Object,StackTrace)", "~(@,@)", "~(Object?,Object?)", "~(String,int)", "~(String[@])", "int(int,int)", "Uint8List(@,@)", "~(ProgressEvent)", "@(String)", "@(@,@)", "bool(Node)", "Element(Node)", "ArticleCategory(String)", "Tag(String)", "~(Element)", "Null(~())", "Null(@,@)", "bool(Article)", "HtmlElement(Article)", "~(String,String)"],
+    types: ["~()", "~(String,@)", "HtmlElement(DefinedArticleCategory)", "~(@)", "~(~())", "~(Tag)", "Null(@)", "~(MouseEvent)", "Null()", "~(Event)", "~(Uint8List,String,int)", "Null(~)", "@()", "_Future<@>(@)", "Future<Null>()", "~(Object,StackTrace)", "~(@,@)", "~(Object?,Object?)", "Null(Object,StackTrace)", "~(String,int)", "~(String[@])", "~(Object[StackTrace?])", "Uint8List(@,@)", "~(int,@)", "~(ProgressEvent)", "@(@,String)", "~(String,String)", "Null(@,StackTrace)", "@(@)", "bool(Node)", "Element(Node)", "ArticleCategory(String)", "Tag(String)", "Null(~())", "~(Element)", "@(@,@)", "Null(@,@)", "bool(Article)", "HtmlElement(Article)", "@(String)", "~(Article)", "int(Tag,Tag)", "int(int,int)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: typeof Symbol == "function" && typeof Symbol() == "symbol" ? Symbol("$ti") : "$ti"
@@ -10696,7 +11027,6 @@
       AsyncError: findType("AsyncError"),
       CssRule: findType("CssRule"),
       DefinedArticleCategory: findType("DefinedArticleCategory"),
-      DefinedTag: findType("DefinedTag"),
       Document: findType("Document"),
       Element: findType("Element"),
       Error: findType("Error"),
@@ -10740,6 +11070,7 @@
       StackTrace: findType("StackTrace"),
       String: findType("String"),
       StyleSheet: findType("StyleSheet"),
+      Tag: findType("Tag"),
       TextTrack: findType("TextTrack"),
       TextTrackCue: findType("TextTrackCue"),
       Touch: findType("Touch"),
@@ -10772,6 +11103,7 @@
       nullable_StackTrace: findType("StackTrace?"),
       nullable__FutureListener_dynamic_dynamic: findType("_FutureListener<@,@>?"),
       nullable_dynamic_Function_Event: findType("@(Event)?"),
+      nullable_int_Function_Tag_Tag: findType("int(Tag,Tag)?"),
       nullable_nullable_Object_Function_2_nullable_Object_and_nullable_Object: findType("Object?(Object?,Object?)?"),
       nullable_void_Function: findType("~()?"),
       nullable_void_Function_ProgressEvent: findType("~(ProgressEvent)?"),
@@ -11062,10 +11394,6 @@
     _lazy($, "DefinedArticleCategory_parentCategories", "$get$DefinedArticleCategory_parentCategories", function() {
       var t1 = H.findType("JSArray<DefinedArticleCategory>");
       return H.setRuntimeTypeInfo([new Z.DefinedArticleCategory("Entity", H.setRuntimeTypeInfo([new Z.DefinedArticleCategory("Zombie", H.setRuntimeTypeInfo([], t1)), new Z.DefinedArticleCategory("Projectile", H.setRuntimeTypeInfo([new Z.DefinedArticleCategory("Snowball", H.setRuntimeTypeInfo([], t1))], t1))], t1)), new Z.DefinedArticleCategory("Player", H.setRuntimeTypeInfo([], t1)), new Z.DefinedArticleCategory("World", H.setRuntimeTypeInfo([], t1)), new Z.DefinedArticleCategory("Particle", H.setRuntimeTypeInfo([], t1)), new Z.DefinedArticleCategory("Effect", H.setRuntimeTypeInfo([], t1))], t1);
-    });
-    _lazy($, "DefinedTag_parentCategories", "$get$DefinedTag_parentCategories", function() {
-      var t1 = H.findType("JSArray<DefinedTag>");
-      return H.setRuntimeTypeInfo([new E.DefinedTag("Entity", H.setRuntimeTypeInfo([new E.DefinedTag("Zombie", H.setRuntimeTypeInfo([], t1))], t1)), new E.DefinedTag("Player", H.setRuntimeTypeInfo([new E.DefinedTag("Teleport", H.setRuntimeTypeInfo([], t1))], t1)), new E.DefinedTag("World", H.setRuntimeTypeInfo([new E.DefinedTag("Chunk", H.setRuntimeTypeInfo([], t1))], t1)), new E.DefinedTag("Particle", H.setRuntimeTypeInfo([new E.DefinedTag("Firework", H.setRuntimeTypeInfo([], t1))], t1)), new E.DefinedTag("Effect", H.setRuntimeTypeInfo([new E.DefinedTag("Test", H.setRuntimeTypeInfo([], t1))], t1)), new E.DefinedTag("Plugin", H.setRuntimeTypeInfo([new E.DefinedTag("PVE", H.setRuntimeTypeInfo([new E.DefinedTag("PVETest", H.setRuntimeTypeInfo([], t1))], t1)), new E.DefinedTag("PVP", H.setRuntimeTypeInfo([], t1))], t1))], t1);
     });
   })();
   (function nativeSupport() {

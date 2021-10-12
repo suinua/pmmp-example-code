@@ -4,45 +4,27 @@ import '../model/tag.dart';
 import '../tag_selector.dart';
 
 class TagView {
-  static HtmlElement convert(DefinedTag definedTag,
-      {bool isTopParent = false}) {
-    var tag = definedTag.toTag();
+  static HtmlElement convert(Tag tag) {
+    var tagElement = DivElement()
+      ..className = 'tag'
+      ..text = tag.text;
 
-    var liElement = LIElement()
-      ..text = tag.text
-      ..className = 'tag';
-
-    liElement.onClick.listen((event) {
-      event.stopPropagation();
+    tagElement.onClick.listen((event) {
       if (TagSelector().getSelectedTags().contains(tag)) {
+        tagElement.remove();
+        var unselectedListHtmlElement = querySelector('.unselected-tag-list');
+        unselectedListHtmlElement!.children.add(tagElement);
+
         TagSelector().deselect(tag);
-        liElement.style.background = '';
       } else {
-        TagSelector().select(definedTag.toTag());
-        liElement.style.background = '#7c7c7c';
+        tagElement.remove();
+        var selectedListHtmlElement = querySelector('.selected-tag-list');
+        selectedListHtmlElement!.children.add(tagElement);
+
+        TagSelector().select(tag);
       }
     });
 
-    //todo:リファクタリング　正直なぜうまくいってるか理解できない
-    if (isTopParent) {
-      var ulListElement = UListElement();
-      ulListElement.children.add(liElement);
-
-      var childrenAsHtml = definedTag.children.map((e) => convert(e)).toList();
-      var childrenWrapElement = UListElement();
-      childrenWrapElement.children.addAll(childrenAsHtml);
-
-      ulListElement.children.add(childrenWrapElement);
-      return ulListElement;
-    }
-
-    if (definedTag.children.isNotEmpty) {
-      var childrenAsHtml = definedTag.children.map((e) => convert(e)).toList();
-      var childrenWrapElement = UListElement();
-      childrenWrapElement.children.addAll(childrenAsHtml);
-      liElement.children.add(childrenWrapElement);
-    }
-
-    return liElement;
+    return tagElement;
   }
 }
