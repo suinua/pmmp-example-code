@@ -22,9 +22,8 @@ jobs:
           KEY: ${{ secrets.KEY }}
         run: dart bin/main.dart
 
-      - uses: EndBug/add-and-commit@v7
-        with:
-          add: 'web'
-          author_name: suinua
-          branch: gh-pages
-          committer_name: suinua
+  - name: Deploy
+    uses: peaceiris/actions-gh-pages@v3
+    with:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+      publish_dir: ./web
