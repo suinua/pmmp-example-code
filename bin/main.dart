@@ -9,8 +9,7 @@ import 'package:markdown/markdown.dart';
 import 'article.dart';
 
 void main() {
-  print(Platform.environment['GITHUB_ACTION_PATH']);
-  print(Platform.environment['KEY']);
+  print(Platform.environment['PATH']);
   //convertMarkdownToHtml();
 }
 
