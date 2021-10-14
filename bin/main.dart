@@ -97,12 +97,11 @@ ${markdownToHtml(fileData.body)}
 }
 
 void saveArticleData(Map data, String path) async {
-  var json = jsonEncode(data);
   var credential = await Credentials.fetch();
   var fbClient = FirebaseClient(credential);
   await fbClient.post(
       'https://firebasestorage.googleapis.com/v0/b/pmmp-example-code.appspot.com/o/data.json',
-      json);
+      data);
 }
 
 class Credentials {
