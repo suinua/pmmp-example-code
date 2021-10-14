@@ -117,6 +117,7 @@ class Credentials {
     });
 
     var scopes = [
+      'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/datastore',
     ];
 
