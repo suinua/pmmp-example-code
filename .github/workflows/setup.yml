@@ -22,14 +22,9 @@ jobs:
           KEY: ${{ secrets.KEY }}
         run: dart bin/main.dart
 
-      - uses: suinua/gh-pages
+      - uses: EndBug/add-and-commit@v7
         with:
           add: 'web'
           author_name: suinua
-          branch: some-branch
+          branch: gh-pages
           committer_name: suinua
-          cwd: '.'
-          message: ''
-          pathspec_error_handling: ignore
-          push: false
-          remove: ''
