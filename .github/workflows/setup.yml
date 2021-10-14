@@ -22,6 +22,14 @@ jobs:
           KEY: ${{ secrets.KEY }}
         run: dart bin/main.dart
 
-      - name: List files
-        run: |
-          ls -R
+      - uses: suinua/gh-pages
+        with:
+          add: 'web'
+          author_name: suinua
+          branch: some-branch
+          committer_name: suinua
+          cwd: '.'
+          message: ''
+          pathspec_error_handling: ignore
+          push: false
+          remove: ''
