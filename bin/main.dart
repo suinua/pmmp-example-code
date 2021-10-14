@@ -117,8 +117,8 @@ class Credentials {
     });
 
     var scopes = [
-      'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/datastore',
+      'https://www.googleapis.com/auth/cloud-platform'
     ];
 
     var client = http.Client();
