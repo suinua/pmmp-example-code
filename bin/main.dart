@@ -9,8 +9,10 @@ import 'package:markdown/markdown.dart';
 import 'article.dart';
 
 void main() {
-  print(Platform.environment['PATH']);
-  print(Platform.script.path);
+  //print(Platform.environment['KEY']);
+  var path = Platform.script.path.replaceFirst('bin/main.dart', 'markdown/');
+  print(path);
+  print(File(path).exists());
   //convertMarkdownToHtml();
 }
 
