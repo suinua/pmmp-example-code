@@ -19,6 +19,5 @@ jobs:
 
       - name: convert markdown files to html and generate data files
         env:
-          PATH: ${{ GITHUB_ACTION_PATH }}
           KEY: ${{ secrets.KEY }}
         run: dart bin/main.dart

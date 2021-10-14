@@ -10,6 +10,7 @@ import 'article.dart';
 
 void main() {
   print(Platform.environment['PATH']);
+  print(Platform.script.path);
   //convertMarkdownToHtml();
 }
 
