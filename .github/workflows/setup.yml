@@ -22,7 +22,6 @@ jobs:
           KEY: ${{ secrets.KEY }}
         run: dart bin/main.dart
 
-      - run: git checkout gh-pages
       - uses: EndBug/add-and-commit@v7
         with:
           add: 'web'
