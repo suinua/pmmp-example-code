@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase/firebase_io.dart';
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:markdown/markdown.dart';
 
@@ -51,17 +54,26 @@ Article markdownToArticle(String markdown) {
   var title = titleLine.replaceAll('# ', '');
 
   var articleCategoryValues = articleCategoryLine.split(':');
-  var articleCategoryParents = articleCategoryValues[0].split(',').map((e) => ArticleCategory([],e)).toList();
-  var articleCategory = ArticleCategory(articleCategoryParents, articleCategoryValues[1]);
+  var articleCategoryParents = articleCategoryValues[0]
+      .split(',')
+      .map((e) => ArticleCategory([], e))
+      .toList();
+  var articleCategory =
+      ArticleCategory(articleCategoryParents, articleCategoryValues[1]);
 
   var tags = <Tag>[];
-  tagsLine.split(' ').toList().forEach((text){
+  tagsLine.split(' ').toList().forEach((text) {
     tags.add(Tag(text));
   });
 
   var body = markdown.replaceAll(RegExp(r'(.*)\n(.*)\n#'), '');
 
-  return Article(url: '$title.html', category: articleCategory, tags: tags, title: title, body: body);
+  return Article(
+      url: '$title.html',
+      category: articleCategory,
+      tags: tags,
+      title: title,
+      body: body);
 }
 
 void generateHtml(Article fileData, String path) {
@@ -88,7 +100,35 @@ ${markdownToHtml(fileData.body)}
       .then((value) => value.writeAsString(html));
 }
 
-void saveArticleData(Map data, String path) {
+void saveArticleData(Map data, String path) async {
   var json = jsonEncode(data);
-  File(path + 'data.json').create().then((value) => value.writeAsString(json));
+  var credential = await Credentials.fetch();
+  var fbClient = FirebaseClient(credential);
+  await fbClient.post(
+      'https://firebasestorage.googleapis.com/v0/b/pmmp-example-code.appspot.com/o/data.json',
+      json);
+}
+
+class Credentials {
+  static Future<String> fetch() async {
+    var pk = json.decode(Platform.environment['KEY']!);
+
+    var accountCredentials = ServiceAccountCredentials.fromJson({
+      'private_key_id': pk['private_key_id'],
+      'private_key': pk['private_key'],
+      'client_email': pk['client_email'],
+      'client_id': pk['client_id'],
+      'type': 'service_account',
+    });
+
+    var scopes = [
+      'https://www.googleapis.com/auth/datastore',
+    ];
+
+    var client = http.Client();
+    var credentials = await obtainAccessCredentialsViaServiceAccount(
+        accountCredentials, scopes, client);
+    client.close();
+    return credentials.accessToken.data;
+  }
 }
