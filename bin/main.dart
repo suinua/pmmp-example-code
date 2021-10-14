@@ -26,7 +26,7 @@ void convertMarkdownToHtml() async {
     articleList.add(markdownToArticle(markdownText));
   }
 
-  var outputPath = basePath + 'output/';
+  var outputPath = basePath + 'web/';
   await Directory(outputPath).create();
 
   var articleListAsJson = <String, Map<String, dynamic>>{};
