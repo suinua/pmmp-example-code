@@ -23,6 +23,7 @@ jobs:
         run: dart bin/main.dart
 
       - uses: EndBug/add-and-commit@v7
+        run: git checkout --orphan gh-pages
         with:
           add: 'web'
           author_name: suinua
