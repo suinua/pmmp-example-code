@@ -1,5 +1,5 @@
 name: pmmp_example_code
-description: web site contains tips for pmmp users
+description: web site contains tips about pmmp
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
