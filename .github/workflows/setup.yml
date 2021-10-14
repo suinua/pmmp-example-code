@@ -22,5 +22,6 @@ jobs:
           KEY: ${{ secrets.KEY }}
         run: dart bin/main.dart
 
-      - name: update html files
-        run: echo "var=x" > タイトル.html
+      - name: List files
+        run: |
+          ls -R
