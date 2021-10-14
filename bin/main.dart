@@ -12,7 +12,7 @@ void main() {
   //print(Platform.environment['KEY']);
   var path = Platform.script.path.replaceFirst('bin/main.dart', 'markdown/');
   print(path);
-  File(path).exists().then(print);
+  File(path + 'custom_entity.md').exists().then(print);
   //convertMarkdownToHtml();
 }
 
