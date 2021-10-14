@@ -9,23 +9,13 @@ import 'package:markdown/markdown.dart';
 import 'article.dart';
 
 void main() {
-  //print(Platform.environment['KEY']);
-  var path = Platform.script.path.replaceFirst('bin/main.dart', 'markdown/');
-  print(path);
-  File(path + 'custom_entity.md').exists().then(print);
-  //convertMarkdownToHtml();
+  convertMarkdownToHtml();
 }
 
 void convertMarkdownToHtml() async {
-  var basePath = '';
-  Platform.script.pathSegments.asMap().forEach((key, element) {
-    if (key < 4) {
-      basePath = key == 0 ? element : basePath + '\\$element';
-    }
-  });
-  basePath += r'\';
+  var basePath =  Platform.script.path.replaceFirst('bin/main.dart', '');
 
-  var markdownFolderPath = basePath + r'markdown\';
+  var markdownFolderPath = basePath + 'markdown/';
   var dir = Directory(markdownFolderPath);
   var files = await dir.list().toList();
 
@@ -36,7 +26,7 @@ void convertMarkdownToHtml() async {
     articleList.add(markdownToArticle(markdownText));
   }
 
-  var outputPath = basePath + r'web\';
+  var outputPath = '/';
   var articleListAsJson = <String, Map<String, dynamic>>{};
   var i = 0;
   articleList.forEach((markdownFileData) {
