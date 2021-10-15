@@ -2931,23 +2931,6 @@
     },
     unmangleGlobalNameIfPreservedAnyways: function($name) {
       return init.mangledGlobalNames[$name];
-    },
-    printString: function(string) {
-      if (typeof dartPrint == "function") {
-        dartPrint(string);
-        return;
-      }
-      if (typeof console == "object" && typeof console.log != "undefined") {
-        console.log(string);
-        return;
-      }
-      if (typeof window == "object")
-        return;
-      if (typeof print == "function") {
-        print(string);
-        return;
-      }
-      throw "Unable to print message: " + String(string);
     }
   },
   J = {
@@ -10661,9 +10644,7 @@
       result = H.setRuntimeTypeInfo([], type$.JSArray_Article);
       for (i = 0; i < articles.length; ++i) {
         article = articles[i];
-        t1 = article.category;
-        H.printString(String(C.JSArray_methods.contains$1(articleCategoryList, t1)));
-        if (C.JSArray_methods.contains$1(articleCategoryList, t1))
+        if (C.JSArray_methods.contains$1(articleCategoryList, article.category))
           C.JSArray_methods.add$1(result, article);
       }
       return result;
