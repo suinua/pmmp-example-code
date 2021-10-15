@@ -5,7 +5,7 @@ import 'view/main_display.dart';
 class CategorySelector {
   static CategorySelector? _instance;
 
-  DefinedArticleCategory? _selectedCategory;
+  ArticleCategory? _selectedCategory;
 
   CategorySelector._internal();
 
@@ -14,7 +14,7 @@ class CategorySelector {
     return _instance!;
   }
 
-  void select(DefinedArticleCategory category) {
+  void select(ArticleCategory category) {
     _selectedCategory = category;
 
     showArticleThumbnails();
@@ -22,7 +22,7 @@ class CategorySelector {
     updateTagListView();
   }
 
-  void deselect(DefinedArticleCategory category) {
+  void deselect(ArticleCategory category) {
     _selectedCategory = null;
 
     showArticleThumbnails();
@@ -30,7 +30,7 @@ class CategorySelector {
     updateTagListView();
   }
 
-  DefinedArticleCategory? getSelectedTags() {
+  ArticleCategory? getSelectedTags() {
     return _selectedCategory;
   }
 }

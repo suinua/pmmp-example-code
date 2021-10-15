@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import '../article_list_manager.dart';
+import '../article_list_store.dart';
 import '../category_selector.dart';
 import '../tag_selector.dart';
 import 'article_view.dart';
