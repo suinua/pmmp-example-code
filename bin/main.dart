@@ -50,6 +50,7 @@ void convertMarkdownToHtml(String basePath) async {
   saveArticleData(articleListAsJson);
 }
 
+//todo:不適当なCategoryだったらエラーをはくように
 Article markdownToArticle(String markdown) {
   markdown = markdown.replaceAll('\r', '');
   var lines = markdown.split('\n');

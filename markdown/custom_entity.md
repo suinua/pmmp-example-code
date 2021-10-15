@@ -1,4 +1,4 @@
-Snowball
+SnowBall
 PMMP3 Zombie PVE
 # タイトル
 説明

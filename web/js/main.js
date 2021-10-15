@@ -2931,6 +2931,23 @@
     },
     unmangleGlobalNameIfPreservedAnyways: function($name) {
       return init.mangledGlobalNames[$name];
+    },
+    printString: function(string) {
+      if (typeof dartPrint == "function") {
+        dartPrint(string);
+        return;
+      }
+      if (typeof console == "object" && typeof console.log != "undefined") {
+        console.log(string);
+        return;
+      }
+      if (typeof window == "object")
+        return;
+      if (typeof print == "function") {
+        print(string);
+        return;
+      }
+      throw "Unable to print message: " + String(string);
     }
   },
   J = {
@@ -6099,15 +6116,6 @@
       this._categoryData = t1;
     }, ArticleListManager__fetchData_closure: function ArticleListManager__fetchData_closure(t0) {
       this.articleListResult = t0;
-    }, ArticleListManager__getCategoryChildren_closure: function ArticleListManager__getCategoryChildren_closure(t0, t1, t2, t3) {
-      var _ = this;
-      _._box_0 = t0;
-      _.$this = t1;
-      _.category = t2;
-      _.data = t3;
-    }, ArticleListManager__arrangeCategoryChildren_closure: function ArticleListManager__arrangeCategoryChildren_closure(t0, t1) {
-      this.$this = t0;
-      this.result = t1;
     }, ArticleListManager_find_closure: function ArticleListManager_find_closure(t0) {
       this.tags = t0;
     }},
@@ -7038,13 +7046,13 @@
     call$1: function(o) {
       return this.getTag(o);
     },
-    $signature: 23
+    $signature: 26
   };
   H.initHooks_closure0.prototype = {
     call$2: function(o, tag) {
       return this.getUnknownTag(o, tag);
     },
-    $signature: 16
+    $signature: 17
   };
   H.initHooks_closure1.prototype = {
     call$1: function(tag) {
@@ -7158,7 +7166,7 @@
       t1.storedCallback = null;
       f.call$0();
     },
-    $signature: 12
+    $signature: 11
   };
   P._AsyncRun__initializeScheduleImmediate_closure.prototype = {
     call$1: function(callback) {
@@ -7174,13 +7182,13 @@
     call$0: function() {
       this.callback.call$0();
     },
-    $signature: 9
+    $signature: 8
   };
   P._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback.prototype = {
     call$0: function() {
       this.callback.call$0();
     },
-    $signature: 9
+    $signature: 8
   };
   P._TimerImpl.prototype = {
     _TimerImpl$2: function(milliseconds, callback) {
@@ -7231,13 +7239,13 @@
     call$2: function(error, stackTrace) {
       this.bodyFunction.call$2(1, new H.ExceptionAndStackTrace(error, type$.StackTrace._as(stackTrace)));
     },
-    $signature: 17
+    $signature: 18
   };
   P._wrapJsFunctionForAsync_closure.prototype = {
     call$2: function(errorCode, result) {
       this.$protected(H._asInt(errorCode), result);
     },
-    $signature: 18
+    $signature: 23
   };
   P.AsyncError.prototype = {
     toString$0: function(_) {
@@ -7489,13 +7497,13 @@
         t1._completeError$2(error, stackTrace);
       }
     },
-    $signature: 12
+    $signature: 11
   };
   P._Future__chainForeignFuture_closure0.prototype = {
     call$2: function(error, stackTrace) {
       this.$this._completeError$2(type$.Object._as(error), type$.StackTrace._as(stackTrace));
     },
-    $signature: 26
+    $signature: 32
   };
   P._Future__chainForeignFuture_closure1.prototype = {
     call$0: function() {
@@ -7560,7 +7568,7 @@
     call$1: function(_) {
       return this.originalSource;
     },
-    $signature: 32
+    $signature: 13
   };
   P._Future__propagateToListeners_handleValueCallback.prototype = {
     call$0: function() {
@@ -7777,7 +7785,7 @@
     call$2: function(k, v) {
       this.result.$indexSet(0, this.K._as(k), this.V._as(v));
     },
-    $signature: 8
+    $signature: 16
   };
   P.ListBase.prototype = {$isIterable: 1, $isList: 1};
   P.ListMixin.prototype = {
@@ -7837,7 +7845,7 @@
       t1._contents = t2 + ": ";
       t1._contents += H.S(v);
     },
-    $signature: 13
+    $signature: 12
   };
   P.MapMixin.prototype = {
     forEach$1: function(receiver, action) {
@@ -7966,7 +7974,7 @@
       }
       return null;
     },
-    $signature: 10
+    $signature: 9
   };
   P.Utf8Decoder__decoderNonfatal_closure.prototype = {
     call$0: function() {
@@ -7979,7 +7987,7 @@
       }
       return null;
     },
-    $signature: 10
+    $signature: 9
   };
   P.Base64Codec.prototype = {
     normalize$3: function(_, source, start, end) {
@@ -8770,7 +8778,7 @@
         target[t2] = transition;
       }
     },
-    $signature: 11
+    $signature: 10
   };
   P._createTables_setRange.prototype = {
     call$3: function(target, range, transition) {
@@ -8782,7 +8790,7 @@
         target[t1] = transition;
       }
     },
-    $signature: 11
+    $signature: 10
   };
   P._SimpleUri.prototype = {
     get$hasAuthority: function() {
@@ -10608,23 +10616,36 @@
       return P._asyncStartSync($async$_fetchData$0, $async$completer);
     },
     _getCategoryChildren$2$categoryData: function(category, categoryData) {
-      var t1 = {},
+      var t1, t2, t3, t4, $name, result,
         data = categoryData == null ? this._categoryData : categoryData;
-      t1.result = P.LinkedHashMap_LinkedHashMap$_empty(type$.String, type$.dynamic);
-      J.forEach$1$ax(data, new N.ArticleListManager__getCategoryChildren_closure(t1, this, category, data));
-      return t1.result;
+      for (t1 = J.getInterceptor$x(data), t2 = J.get$iterator$ax(t1.get$keys(data)), t3 = type$.nullable_Map_dynamic_dynamic, t4 = category.text; t2.moveNext$0();) {
+        $name = t2.get$current(t2);
+        if (J.$eq$($name, t4))
+          return P.LinkedHashMap_LinkedHashMap$from(type$.Map_dynamic_dynamic._as(t1.$index(data, $name)), type$.String, type$.dynamic);
+        else {
+          result = this._getCategoryChildren$2$categoryData(category, t3._as(t1.$index(data, $name)));
+          if (result.get$isNotEmpty(result))
+            return result;
+        }
+      }
+      return P.LinkedHashMap_LinkedHashMap$_empty(type$.String, type$.dynamic);
     },
     _getCategoryChildren$1: function(category) {
       return this._getCategoryChildren$2$categoryData(category, null);
     },
     _arrangeCategoryChildren$2: function(data, result) {
+      var res, t1, t2, t3, t4, t5;
       type$.Map_String_dynamic._as(data);
-      type$.List_ArticleCategory._as(result);
-      J.forEach$1$ax(data, new N.ArticleListManager__arrangeCategoryChildren_closure(this, result));
-      return result;
+      res = P.List_List$from(type$.List_ArticleCategory._as(result), true, type$.ArticleCategory);
+      for (t1 = data.get$keys(data), t1 = t1.get$iterator(t1), t2 = type$.Map_dynamic_dynamic, t3 = type$.String, t4 = type$.dynamic; t1.moveNext$0();) {
+        t5 = t1.get$current(t1);
+        C.JSArray_methods.addAll$1(res, this._arrangeCategoryChildren$2(P.LinkedHashMap_LinkedHashMap$from(t2._as(data.$index(0, t5)), t3, t4), res));
+        C.JSArray_methods.add$1(res, new Z.ArticleCategory(t5));
+      }
+      return res;
     },
     find$2: function(_, tags, category) {
-      var t1, articles, t2, articleCategoryChildren, result, i, article;
+      var t1, articles, t2, articleCategoryList, result, i, article;
       type$.List_Tag._as(tags);
       t1 = tags.length;
       articles = this._articleList;
@@ -10635,11 +10656,14 @@
       }
       if (category == null)
         return articles;
-      articleCategoryChildren = this._arrangeCategoryChildren$2(this._getCategoryChildren$1(category), H.setRuntimeTypeInfo([], type$.JSArray_ArticleCategory));
+      articleCategoryList = this._arrangeCategoryChildren$2(this._getCategoryChildren$1(category), H.setRuntimeTypeInfo([], type$.JSArray_ArticleCategory));
+      C.JSArray_methods.add$1(articleCategoryList, category);
       result = H.setRuntimeTypeInfo([], type$.JSArray_Article);
       for (i = 0; i < articles.length; ++i) {
         article = articles[i];
-        if (C.JSArray_methods.contains$1(articleCategoryChildren, article.category))
+        t1 = article.category;
+        H.printString(String(C.JSArray_methods.contains$1(articleCategoryList, t1)));
+        if (C.JSArray_methods.contains$1(articleCategoryList, t1))
           C.JSArray_methods.add$1(result, article);
       }
       return result;
@@ -10656,27 +10680,6 @@
       C.JSArray_methods.add$1(this.articleListResult, T.Article$fromJson(P.LinkedHashMap_LinkedHashMap$from(type$.Map_dynamic_dynamic._as(data), type$.String, type$.dynamic)));
     },
     $signature: 34
-  };
-  N.ArticleListManager__getCategoryChildren_closure.prototype = {
-    call$2: function(categoryName, value) {
-      var result, _this = this,
-        t1 = _this.category;
-      if (J.$eq$(categoryName, t1.text))
-        return value;
-      result = _this.$this._getCategoryChildren$2$categoryData(t1, type$.nullable_Map_dynamic_dynamic._as(J.$index$asx(_this.data, categoryName)));
-      _this._box_0.result = result;
-      if (result.get$isNotEmpty(result))
-        return;
-    },
-    $signature: 8
-  };
-  N.ArticleListManager__arrangeCategoryChildren_closure.prototype = {
-    call$2: function(categoryName, value) {
-      var t1 = this.result;
-      C.JSArray_methods.add$1(t1, new Z.ArticleCategory(H._asString(categoryName)));
-      C.JSArray_methods.addAll$1(t1, this.$this._arrangeCategoryChildren$2(type$.Map_String_dynamic._as(value), t1));
-    },
-    $signature: 1
   };
   N.ArticleListManager_find_closure.prototype = {
     call$1: function(element) {
@@ -10873,7 +10876,7 @@
     _inherit(P.ListBase, P._ListBase_Object_ListMixin);
     _inheritMany(P.ListBase, [H.UnmodifiableListBase, W._ChildrenElementList, W._FrozenElementList, W._ChildNodeListLazy, P.FilteredElementList]);
     _inherit(H.CodeUnits, H.UnmodifiableListBase);
-    _inheritMany(H.Closure, [H.nullFuture_closure, H.TearOffClosure, H.initHooks_closure, H.initHooks_closure0, H.initHooks_closure1, P._AsyncRun__initializeScheduleImmediate_internalCallback, P._AsyncRun__initializeScheduleImmediate_closure, P._AsyncRun__scheduleImmediateJsOverride_internalCallback, P._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, P._TimerImpl_internalCallback, P._awaitOnObject_closure, P._awaitOnObject_closure0, P._wrapJsFunctionForAsync_closure, P._Future__addListener_closure, P._Future__prependListeners_closure, P._Future__chainForeignFuture_closure, P._Future__chainForeignFuture_closure0, P._Future__chainForeignFuture_closure1, P._Future__asyncCompleteWithValue_closure, P._Future__chainFuture_closure, P._Future__asyncCompleteError_closure, P._Future__propagateToListeners_handleWhenCompleteCallback, P._Future__propagateToListeners_handleWhenCompleteCallback_closure, P._Future__propagateToListeners_handleValueCallback, P._Future__propagateToListeners_handleError, P.Stream_forEach_closure, P.Stream_forEach_closure0, P.Stream_forEach__closure, P.Stream_forEach__closure0, P.Stream_length_closure, P.Stream_length_closure0, P._cancelAndError_closure, P._cancelAndErrorClosure_closure, P._rootHandleUncaughtError_closure, P._RootZone_bindCallbackGuarded_closure, P._RootZone_bindUnaryCallbackGuarded_closure, P.LinkedHashMap_LinkedHashMap$from_closure, P.MapBase_mapToString_closure, P.Utf8Decoder__decoder_closure, P.Utf8Decoder__decoderNonfatal_closure, P.Uri__parseIPv4Address_error, P.Uri_parseIPv6Address_error, P.Uri_parseIPv6Address_parseHex, P._createTables_build, P._createTables_setChars, P._createTables_setRange, W.HttpRequest_request_closure, W.MidiInputMap_keys_closure, W.MidiOutputMap_keys_closure, W.RtcStatsReport_keys_closure, W.Storage_keys_closure, W._EventStreamSubscription_closure, W._EventStreamSubscription_onData_closure, P._AcceptStructuredClone_walk_closure, P.FilteredElementList__iterable_closure, P.FilteredElementList__iterable_closure0, P.promiseToFuture_closure, P.promiseToFuture_closure0, P.AudioParamMap_keys_closure, T.Article$fromJson_closure, K.ArticleCategoryView_convert_closure, K.ArticleCategoryView_convert__closure, K.ArticleCategoryView_convert___closure, N.ArticleListManager__fetchData_closure, N.ArticleListManager__getCategoryChildren_closure, N.ArticleListManager__arrangeCategoryChildren_closure, N.ArticleListManager_find_closure, F.main_closure, Q.showArticleThumbnails_closure, Q.updateTagListView_closure, Q.updateTagListView_closure0, L.TagSelector_refresh_closure, L.TagSelector_refresh__closure, L.TagSelector_refresh_closure0, L.TagView_convert_closure]);
+    _inheritMany(H.Closure, [H.nullFuture_closure, H.TearOffClosure, H.initHooks_closure, H.initHooks_closure0, H.initHooks_closure1, P._AsyncRun__initializeScheduleImmediate_internalCallback, P._AsyncRun__initializeScheduleImmediate_closure, P._AsyncRun__scheduleImmediateJsOverride_internalCallback, P._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, P._TimerImpl_internalCallback, P._awaitOnObject_closure, P._awaitOnObject_closure0, P._wrapJsFunctionForAsync_closure, P._Future__addListener_closure, P._Future__prependListeners_closure, P._Future__chainForeignFuture_closure, P._Future__chainForeignFuture_closure0, P._Future__chainForeignFuture_closure1, P._Future__asyncCompleteWithValue_closure, P._Future__chainFuture_closure, P._Future__asyncCompleteError_closure, P._Future__propagateToListeners_handleWhenCompleteCallback, P._Future__propagateToListeners_handleWhenCompleteCallback_closure, P._Future__propagateToListeners_handleValueCallback, P._Future__propagateToListeners_handleError, P.Stream_forEach_closure, P.Stream_forEach_closure0, P.Stream_forEach__closure, P.Stream_forEach__closure0, P.Stream_length_closure, P.Stream_length_closure0, P._cancelAndError_closure, P._cancelAndErrorClosure_closure, P._rootHandleUncaughtError_closure, P._RootZone_bindCallbackGuarded_closure, P._RootZone_bindUnaryCallbackGuarded_closure, P.LinkedHashMap_LinkedHashMap$from_closure, P.MapBase_mapToString_closure, P.Utf8Decoder__decoder_closure, P.Utf8Decoder__decoderNonfatal_closure, P.Uri__parseIPv4Address_error, P.Uri_parseIPv6Address_error, P.Uri_parseIPv6Address_parseHex, P._createTables_build, P._createTables_setChars, P._createTables_setRange, W.HttpRequest_request_closure, W.MidiInputMap_keys_closure, W.MidiOutputMap_keys_closure, W.RtcStatsReport_keys_closure, W.Storage_keys_closure, W._EventStreamSubscription_closure, W._EventStreamSubscription_onData_closure, P._AcceptStructuredClone_walk_closure, P.FilteredElementList__iterable_closure, P.FilteredElementList__iterable_closure0, P.promiseToFuture_closure, P.promiseToFuture_closure0, P.AudioParamMap_keys_closure, T.Article$fromJson_closure, K.ArticleCategoryView_convert_closure, K.ArticleCategoryView_convert__closure, K.ArticleCategoryView_convert___closure, N.ArticleListManager__fetchData_closure, N.ArticleListManager_find_closure, F.main_closure, Q.showArticleThumbnails_closure, Q.updateTagListView_closure, Q.updateTagListView_closure0, L.TagSelector_refresh_closure, L.TagSelector_refresh__closure, L.TagSelector_refresh_closure0, L.TagView_convert_closure]);
     _inheritMany(P.Iterable, [H.EfficientLengthIterable, H.MappedIterable, H.WhereIterable]);
     _inheritMany(H.EfficientLengthIterable, [H.ListIterable, H.LinkedHashMapKeyIterable]);
     _inheritMany(P.Iterator, [H.MappedIterator, H.WhereIterator]);
@@ -11038,7 +11041,7 @@
     mangledNames: {},
     getTypeFromName: getGlobalFromName,
     metadata: [],
-    types: ["~()", "~(String,@)", "~(Tag)", "~(@)", "~(~())", "Null(~)", "~(MouseEvent)", "~(Event)", "~(@,@)", "Null()", "@()", "~(Uint8List,String,int)", "Null(@)", "~(Object?,Object?)", "Future<Null>()", "~(Object,StackTrace)", "@(@,String)", "Null(@,StackTrace)", "~(int,@)", "~(String,int)", "~(String[@])", "int(int,int)", "Uint8List(@,@)", "@(@)", "~(ProgressEvent)", "@(String)", "Null(Object,StackTrace)", "int(Tag,Tag)", "@(@,@)", "bool(Node)", "Element(Node)", "Tag(String)", "_Future<@>(@)", "~(Element)", "Null(@,@)", "bool(Article)", "HtmlElement(Article)", "Null(~())", "~(Article)", "~(Object[StackTrace?])", "~(String,String)"],
+    types: ["~()", "~(String,@)", "~(Tag)", "~(@)", "~(~())", "Null(~)", "~(MouseEvent)", "~(Event)", "Null()", "@()", "~(Uint8List,String,int)", "Null(@)", "~(Object?,Object?)", "_Future<@>(@)", "Future<Null>()", "~(Object,StackTrace)", "~(@,@)", "@(@,String)", "Null(@,StackTrace)", "~(String,int)", "~(String[@])", "int(int,int)", "Uint8List(@,@)", "~(int,@)", "~(ProgressEvent)", "@(String)", "@(@)", "int(Tag,Tag)", "@(@,@)", "bool(Node)", "Element(Node)", "Tag(String)", "Null(Object,StackTrace)", "~(Element)", "Null(@,@)", "bool(Article)", "HtmlElement(Article)", "Null(~())", "~(Article)", "~(Object[StackTrace?])", "~(String,String)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: typeof Symbol == "function" && typeof Symbol() == "symbol" ? Symbol("$ti") : "$ti"
@@ -11050,6 +11053,7 @@
     var findType = H.findType;
     return {
       Article: findType("Article"),
+      ArticleCategory: findType("ArticleCategory"),
       AsyncError: findType("AsyncError"),
       CssRule: findType("CssRule"),
       Document: findType("Document"),

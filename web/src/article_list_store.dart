@@ -60,29 +60,29 @@ class ArticleListManager {
       {Map? categoryData}) {
     var data = categoryData ?? _categoryData;
 
-    var result = <String, dynamic>{};
-    data.forEach((categoryName, value) {
-      if (categoryName == category.text) {
-        return value;
+    for (var name in data.keys) {
+      if (name == category.text) {
+        return Map<String, dynamic>.from(data[name]);
+      } else {
+        var result = _getCategoryChildren(category, categoryData: data[name]);
+        if (result.isNotEmpty) return result;
       }
+    }
 
-      result = _getCategoryChildren(category, categoryData: data[categoryName]);
-      if (result.isNotEmpty) {
-        return;
-      }
-    });
-
-    return result;
+    return {};
   }
 
   List<ArticleCategory> _arrangeCategoryChildren(
       Map<String, dynamic> data, List<ArticleCategory> result) {
-    data.forEach((categoryName, value) {
-      result.add(ArticleCategory(categoryName));
-      result.addAll(_arrangeCategoryChildren(value, result));
-    });
 
-    return result;
+    var res = List<ArticleCategory>.from(result);
+
+    for (var categoryName in data.keys) {
+      res.addAll(_arrangeCategoryChildren(Map<String, dynamic>.from(data[categoryName]), res));
+      res.add(ArticleCategory(categoryName));
+    }
+
+    return res;
   }
 
   List<Article> find(List<Tag> tags, ArticleCategory? category) {
@@ -93,13 +93,16 @@ class ArticleListManager {
 
     if (category == null) return articles;
 
-    var articleCategoryChildren =
+    var articleCategoryList =
         _arrangeCategoryChildren(_getCategoryChildren(category), []);
+    articleCategoryList.add(category);
+
+
     //カテゴリと一致するものだけをとりだす
     var result = <Article>[];
     for (var i = 0; i < articles.length; i++) {
       var article = articles[i];
-      if (articleCategoryChildren.contains(article.category)) {
+      if (articleCategoryList.contains(article.category)) {
         result.add(article);
       }
     }
