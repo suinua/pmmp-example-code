@@ -1,4 +1,4 @@
-import 'article_list_manager.dart';
+import 'article_list_store.dart';
 import 'category_selector.dart';
 import 'model/tag.dart';
 import 'view/main_display.dart';

@@ -21,10 +21,7 @@ class Article {
   Map<String, dynamic> toJson() {
     return {
       'url': url,
-      'category': {
-        'parents': category.parents.map((e) => e.text).toList(),
-        'text': category.text
-      },
+      'category': category.text,
       'tags': tags.map((e) => e.text).toList(),
       'title': title,
       'body': body
@@ -40,7 +37,6 @@ class Tag {
 
 class ArticleCategory {
   final text;
-  final List<ArticleCategory> parents;
 
-  const ArticleCategory(this.parents, this.text);
+  const ArticleCategory(this.text);
 }

@@ -1,0 +1,13 @@
+{
+  "Entity": {
+    "Projectile": {
+      "SnowBall": {}
+    }
+  },
+  "Player": {},
+  "World": {},
+  "Block": {},
+  "Item": {},
+  "ResourcePack": {},
+  "Plugin": {}
+}

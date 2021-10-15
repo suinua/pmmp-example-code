@@ -21,7 +21,7 @@ class Article {
         tags = tags,
         body = body;
 
-  bool hasWebTag(List<Tag> objects) {
+  bool hasTag(List<Tag> objects) {
     for (var i = 0; i < objects.length; i++) {
       if (tags.contains(objects[i])) return true;
     }
@@ -31,7 +31,7 @@ class Article {
 
   Article.fromJson(Map<String, dynamic> json)
       : url = json['url'],
-        category = ArticleCategory(List<String>.from(json['category']['parents']).map((e) => ArticleCategory([], e)).toList(),json['category']['text']),
+        category = ArticleCategory(json['category']),
         tags = List<String>.from(json['tags'])
             .map((element) => Tag(element))
             .toList(),

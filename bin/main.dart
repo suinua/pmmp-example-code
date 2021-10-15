@@ -9,12 +9,22 @@ import 'package:markdown/markdown.dart';
 import 'article.dart';
 
 void main() {
-  convertMarkdownToHtml();
-}
-
-void convertMarkdownToHtml() async {
   var basePath =  Platform.script.path.replaceFirst('bin/main.dart', '');
 
+  convertMarkdownToHtml(basePath);
+  deployCategoryData(basePath);
+}
+
+void deployCategoryData(String basePath) async {
+  var jsonString = await File(basePath + 'data/category.json').readAsString();
+  var credential = await Credentials.fetch();
+  var fbClient = FirebaseClient(credential);
+  await fbClient.post(
+      'https://firebasestorage.googleapis.com/v0/b/pmmp-example-code.appspot.com/o/category.json',
+      json.decode(jsonString));
+}
+
+void convertMarkdownToHtml(String basePath) async {
   var markdownFolderPath = basePath + 'markdown/';
   var dir = Directory(markdownFolderPath);
   var files = await dir.list().toList();
@@ -37,7 +47,7 @@ void convertMarkdownToHtml() async {
     i++;
   });
 
-  saveArticleData(articleListAsJson, basePath);
+  saveArticleData(articleListAsJson);
 }
 
 Article markdownToArticle(String markdown) {
@@ -48,14 +58,8 @@ Article markdownToArticle(String markdown) {
   var titleLine = lines[2];
 
   var title = titleLine.replaceAll('# ', '');
-
-  var articleCategoryValues = articleCategoryLine.split(':');
-  var articleCategoryParents = articleCategoryValues[0]
-      .split(',')
-      .map((e) => ArticleCategory([], e))
-      .toList();
   var articleCategory =
-      ArticleCategory(articleCategoryParents, articleCategoryValues[1]);
+      ArticleCategory(articleCategoryLine);
 
   var tags = <Tag>[];
   tagsLine.split(' ').toList().forEach((text) {
@@ -96,7 +100,7 @@ ${markdownToHtml(fileData.body)}
       .then((value) => value.writeAsString(html));
 }
 
-void saveArticleData(Map data, String path) async {
+void saveArticleData(Map data) async {
   var credential = await Credentials.fetch();
   var fbClient = FirebaseClient(credential);
   await fbClient.post(
