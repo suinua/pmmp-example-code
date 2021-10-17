@@ -1,4 +1,4 @@
-name: setup
+name: update_github_pages
 
 on:
   push:
