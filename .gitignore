@@ -10,3 +10,7 @@ doc/api/
 
 # IDE
 .idea/
+
+# Dart2js
+main.js
+main.js.deps
