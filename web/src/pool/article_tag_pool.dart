@@ -1,25 +1,22 @@
-import 'article_list_store.dart';
-import 'category_selector.dart';
-import 'model/tag.dart';
-import 'view/main_display.dart';
+import '../model/article.dart';
+import '../model/tag.dart';
 
-class TagSelector {
-  static TagSelector? _instance;
+class ArticleTagPool {
+  static ArticleTagPool? _instance;
 
   List<Tag> _unselectedTagList;
   List<Tag> _selectedTagList;
 
-  TagSelector._internal()
+  ArticleTagPool._internal()
       : _unselectedTagList = [],
         _selectedTagList = [];
 
-  factory TagSelector() {
-    _instance ??= TagSelector._internal();
+  factory ArticleTagPool() {
+    _instance ??= ArticleTagPool._internal();
     return _instance!;
   }
 
-  void refresh() {
-    var articles = ArticleListManager().find([], CategorySelector().getSelectedTags());
+  void refresh(List<Article> articles) {
     var allTags = <Tag>[];
 
     articles.forEach((article) {
@@ -45,15 +42,12 @@ class TagSelector {
     _selectedTagList.add(tag);
     _unselectedTagList.remove(tag);
 
-    showArticleThumbnails();
   }
 
   void deselect(Tag tag) {
     if (!_selectedTagList.contains(tag)) return;
     _selectedTagList.remove(tag);
     _unselectedTagList.add(tag);
-
-    showArticleThumbnails();
   }
 
   void clearSelectedTags() {
