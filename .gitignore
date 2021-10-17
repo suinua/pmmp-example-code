@@ -13,4 +13,4 @@ doc/api/
 
 # Dart2js
 main.js
-main.js.deps
+main.js*
