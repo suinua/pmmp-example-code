@@ -22,7 +22,10 @@ jobs:
           KEY: ${{ secrets.KEY }}
         run: dart bin/main.dart
 
-      - name: Deploy
+      - name: Run Dart2js
+        run: dart2js ./web/src/main.dart -o ./web/js/main.js
+
+      - name: Deploy Github Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
