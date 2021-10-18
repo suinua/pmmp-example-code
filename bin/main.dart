@@ -84,11 +84,11 @@ void generateHtml(Article fileData, String path) {
 <head>
     <meta charset="UTF-8">
     <title>${fileData.title}</title>
-    <link rel="stylesheet" href="article.css">
+    <link rel="stylesheet" href="css/article.css">
 
     <script src="highlight/highlight.min.js"></script>
     <link rel="stylesheet"
-          href="highlight/style/idea.min.css">
+          href="highlight/styles/idea.min.css">
     <script>hljs.highlightAll();</script>
 </head>
 <body>
