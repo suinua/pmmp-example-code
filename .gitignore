@@ -12,5 +12,4 @@ doc/api/
 .idea/
 
 # Dart2js
-main.js
-main.js*
+web/js/
