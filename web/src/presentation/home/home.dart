@@ -1,10 +1,8 @@
 import 'dart:html';
+import 'dart:svg';
 
 import '../../model/article.dart';
-import '../../model/article_category.dart';
 import '../../model/tag.dart';
-import '../../pool/article_category_pool.dart';
-import '../../pool/article_tag_pool.dart';
 import 'home_controller.dart';
 
 class Home {
@@ -28,32 +26,43 @@ class Home {
       ..className = 'tag'
       ..text = tag.text;
 
-    tagElement.onClick.listen((event) => HomeController.onClickTag(event, tagElement, tag));
+    tagElement.onClick
+        .listen((event) => HomeController.onClickTag(event, tagElement, tag));
 
     return tagElement;
   }
 
   static HtmlElement categoryListToHtmlElement(
       Map<String, dynamic> categoryData, HtmlElement? parent) {
-    parent ??= UListElement();
+    var isTopLayer = false;
+    if (parent == null) {
+      isTopLayer = true;
+      parent = UListElement()
+        ..className = 'uk-nav-default uk-nav-parent-icon'
+        ..setAttribute('uk-nav', 'multiple: true');
+    }
 
     categoryData.forEach((categoryName, value) {
-      var liElement = LIElement()
-        ..text = categoryName
-        ..className = 'category';
+      var titleElement = AElement()
+        ..setAttribute('category-name', categoryName)
+        ..id = 'category-selector'
+        ..setAttribute('href', '#')
+        ..text = categoryName;
 
-      liElement.onClick.listen((event) => HomeController.onClickCategory(event, liElement, categoryName));
+      var liElement = LIElement()
+        ..className = isTopLayer ? 'uk-parent' : ''
+        ..children.add(titleElement);
+
+      parent!.children.add(liElement);
 
       if (value is Map<String, dynamic>) {
         if (value.isNotEmpty) {
-          var childrenWrapElement = UListElement();
+          var childrenWrapElement = UListElement()
+            ..className = isTopLayer ? 'uk-nav-sub' : '';
           var childrenAsHtml =
               categoryListToHtmlElement(value, childrenWrapElement);
 
           liElement.children.add(childrenAsHtml);
-          parent!.children.add(liElement);
-        } else {
-          parent!.children.add(liElement);
         }
       }
     });
