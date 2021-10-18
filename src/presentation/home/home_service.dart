@@ -18,8 +18,7 @@ class HomeService {
     //また、uk-navが消えないようにvalidatorを設定しなきゃいけない。
     var htmlValidator = NodeValidatorBuilder
         .common()
-      ..allowElement('a',attributes: ['category-name'])
-      ..allowElement('ul',attributes: ['uk-nav']);
+      ..allowElement('a',attributes: ['category-name']);
     var content = categoryListHtmlElement.innerHtml;
     categoryListHtmlElement.setInnerHtml(content!, validator: htmlValidator);
 

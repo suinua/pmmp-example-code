@@ -398,9 +398,8 @@
       htmlValidator = new W.NodeValidatorBuilder(t3);
       C.JSArray_methods.add$1(t3, W._Html5NodeValidator$(null));
       C.JSArray_methods.add$1(t3, W._TemplatingNodeValidator$());
-      t3 = type$.JSArray_String;
-      htmlValidator.allowElement$2$attributes("a", H._setArrayType(["category-name"], t3));
-      htmlValidator.allowElement$2$attributes("ul", H._setArrayType(["uk-nav"], t3));
+      t3 = type$.nullable_Iterable_String;
+      htmlValidator.allowCustomElement$4$attributes$uriAttributes$uriPolicy("a", t3._as(H._setArrayType(["category-name"], type$.JSArray_String)), t3._as(null), null);
       $content = t2.get$innerHtml(categoryListHtmlElement);
       $content.toString;
       t2.setInnerHtml$2$validator(categoryListHtmlElement, $content, htmlValidator);
@@ -6498,8 +6497,7 @@
       if ($parent == null) {
         t1.isTopLayer = true;
         $parent = document.createElement("ul");
-        $parent.className = "uk-nav-default uk-nav-parent-icon";
-        $parent.setAttribute("uk-nav", "multiple: true");
+        $parent.className = "uk-nav uk-nav-default";
         t1.parent = $parent;
       }
       J.forEach$1$ax(categoryData, new Y.Home_categoryListToHtmlElement_closure(t1));
@@ -10686,9 +10684,6 @@
       t4 = type$.Location._as(window.location);
       C.JSArray_methods.add$1(this._validators, W._CustomElementNodeValidator$(new W._SameOriginUriPolicy(t3, t4), H._setArrayType([tagNameUpper], type$.JSArray_String), new H.MappedListIterable(attributes, t2, t1._eval$1("MappedListIterable<1,String>")), null, false, true));
     },
-    allowElement$2$attributes(tagName, attributes) {
-      this.allowCustomElement$4$attributes$uriAttributes$uriPolicy(tagName, type$.nullable_Iterable_String._as(attributes), null, null);
-    },
     allowsElement$1(element) {
       return C.JSArray_methods.any$1(this._validators, new W.NodeValidatorBuilder_allowsElement_closure(element));
     },
@@ -11797,6 +11792,12 @@
           childrenWrapElement.className = t2.isTopLayer ? "uk-nav-sub" : "";
           liElement.appendChild(Y.Home_categoryListToHtmlElement(value, childrenWrapElement));
         }
+      if (t2.isTopLayer) {
+        t2 = t2.parent;
+        t1 = t1.createElement("li");
+        t1.className = "uk-nav-divider";
+        t2.appendChild(t1);
+      }
     },
     $signature: 1
   };

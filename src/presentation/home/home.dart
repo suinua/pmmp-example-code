@@ -38,8 +38,7 @@ class Home {
     if (parent == null) {
       isTopLayer = true;
       parent = UListElement()
-        ..className = 'uk-nav-default uk-nav-parent-icon'
-        ..setAttribute('uk-nav', 'multiple: true');
+        ..className = 'uk-nav uk-nav-default';
     }
 
     categoryData.forEach((categoryName, value) {
@@ -64,6 +63,10 @@ class Home {
 
           liElement.children.add(childrenAsHtml);
         }
+      }
+
+      if (isTopLayer) {
+        parent.children.add(LIElement()..className='uk-nav-divider');
       }
     });
 
