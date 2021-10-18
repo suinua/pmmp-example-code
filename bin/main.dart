@@ -89,7 +89,7 @@ void generateHtml(Article fileData, String path) {
     <script src="highlight/highlight.min.js"></script>
     <link rel="stylesheet"
           href="highlight/style/idea.min.css">
-    <script>hljs.initHighlightingOnLoad();</script>
+    <script>hljs.highlightAll();</script>
 </head>
 <body>
 ${markdownToHtml(fileData.body)}
