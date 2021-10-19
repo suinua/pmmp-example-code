@@ -1,18 +1,23 @@
 import '../model/article.dart';
 import '../model/article_category.dart';
 import '../model/tag.dart';
-import '../store/articles_store.dart';
+import 'search_articles.dart';
 
 class FilterArticles {
   static List<Article> execute(
       List<Article> allArticles, Map<String, dynamic> categoriesData,
-      {ArticleCategory? category, List<Tag> tags = const []}) {
-    var allArticles = ArticlesStore().getArticles();
+      {ArticleCategory? category, List<Tag> tags = const [],String text = ''}) {
+    var articles = allArticles;
+
+    //テキスト検索
+    if (text != '') {
+      articles = SearchArticles.execute(articles, text);
+    }
 
     //タグが一致する記事
-    var articles = tags.isEmpty
-        ? allArticles
-        : allArticles.where((element) => element.hasTag(tags)).toList();
+    if (tags.isNotEmpty) {
+      articles = articles.where((element) => element.hasTag(tags)).toList();
+    }
 
     if (category == null) return articles;
 
