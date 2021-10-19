@@ -1,8 +1,9 @@
 {
   "Entity": {
+    "NPC":{},
     "Projectile": {
       "SnowBall": {}
-    }
+    },
   },
   "Player": {},
   "World": {},
