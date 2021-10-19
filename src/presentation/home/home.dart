@@ -9,10 +9,27 @@ import 'home_service.dart';
 class Home {
   static void init() {
     HomeService.setUpCategoryListView();
-    querySelector('#search')?.onKeyPress.listen(HomeController.onKeyPressInSearchInput);
+    querySelector('#search')
+        ?.onKeyPress
+        .listen(HomeController.onKeyPressInSearchInput);
   }
 
   static HtmlElement articleToHtmlElement(Article article) {
+    HtmlElement _articleTagElement(Tag tag) {
+      return DivElement()
+        ..style.backgroundColor = '#58ACFA'
+        ..style.padding = '3px 6px'
+        ..style.marginRight = '8px'
+        ..style.marginLeft = '1px'
+        ..style.fontSize = '75%'
+        ..style.color = 'white'
+        ..style.borderRadius = '6px'
+        ..style.boxShadow = '0 0 3px #ddd'
+        ..style.whiteSpace = 'nowrap'
+        ..text = tag.text
+        ..className = 'article-tags';
+    }
+
     var articleElement = AnchorElement(href: article.url)
       ..className = 'article'
       ..children = [
@@ -20,8 +37,14 @@ class Home {
           ..className = 'title'
           ..text = article.title,
         DivElement()
+          ..style.fontSize = '90%'
+          ..style.fontFamily = 'Be Vietnam Pro'
+          ..style.color= '#969696'
+          ..style.overflow= 'hidden'
           ..className = 'concise-body'
-          ..text = article.body
+          ..text = article.body,
+        DivElement()
+          ..children = article.tags.map((e) => _articleTagElement(e)).toList()
       ];
 
     return articleElement;

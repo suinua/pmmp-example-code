@@ -42,22 +42,33 @@ class HomeController {
 
       ArticleTagPool().select(tag);
     }
+
+    var articles = FilterArticles.execute(
+      ArticlesStore().getArticles(),
+      ArticlesStore().getCategoryData(),
+      category: ArticleCategoryPool().getSelectedCategory(),
+      tags: ArticleTagPool().getSelectedTags(),
+    );
+
+    HomeService.updateArticlesListView(articles);
   }
 
   static void onKeyPressInSearchInput(KeyboardEvent event) {
     if (event.keyCode == 13) {
       var inputElement = querySelector('#search');
-      var text = inputElement!.text;
+      if (inputElement is InputElement) {
+        var text = inputElement.value;
 
-      var articles = FilterArticles.execute(
-        ArticlesStore().getArticles(),
-        ArticlesStore().getCategoryData(),
-        category: ArticleCategoryPool().getSelectedCategory(),
-        tags: ArticleTagPool().getSelectedTags(),
-        text: text ?? ''
-      );
+        var articles = FilterArticles.execute(
+            ArticlesStore().getArticles(),
+            ArticlesStore().getCategoryData(),
+            category: ArticleCategoryPool().getSelectedCategory(),
+            tags: ArticleTagPool().getSelectedTags(),
+            text: text ?? ''
+        );
 
-      HomeService.updateArticlesListView(articles);
+        HomeService.updateArticlesListView(articles);
+      }
     }
   }
 }
