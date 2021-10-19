@@ -5,7 +5,7 @@ import '../../model/tag.dart';
 import '../../pool/article_category_pool.dart';
 import '../../pool/article_tag_pool.dart';
 import '../../store/articles_store.dart';
-import '../../utility/FilterArtciles.dart';
+import '../../utility/filter_artciles.dart';
 import 'home_service.dart';
 
 class HomeController {
@@ -41,6 +41,23 @@ class HomeController {
       selectedListHtmlElement!.children.add(tagElement);
 
       ArticleTagPool().select(tag);
+    }
+  }
+
+  static void onKeyPressInSearchInput(KeyboardEvent event) {
+    if (event.keyCode == 13) {
+      var inputElement = querySelector('#search');
+      var text = inputElement!.text;
+
+      var articles = FilterArticles.execute(
+        ArticlesStore().getArticles(),
+        ArticlesStore().getCategoryData(),
+        category: ArticleCategoryPool().getSelectedCategory(),
+        tags: ArticleTagPool().getSelectedTags(),
+        text: text ?? ''
+      );
+
+      HomeService.updateArticlesListView(articles);
     }
   }
 }

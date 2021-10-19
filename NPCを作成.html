@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NPCを作成</title>
+    <link rel="stylesheet" href="css/article.css">
+
+    <script src="highlight/highlight.min.js"></script>
+    <link rel="stylesheet"
+          href="highlight/styles/idea.min.css">
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<p>NPCを作成
+説明</p>
+<pre><code class="language-php">use pocketmine\entity\Human;
+use pocketmine\entity\Skin;
+use pocketmine\level\Level;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\utils\UUID;
+
+class NPC extends Human
+{
+    const NAME ="";
+
+    protected $skinId = "Standard_CustomSlim";
+    protected $skinName = "";
+
+    protected $capeData = "";
+
+    protected $geometryId = "";
+    protected $geometryName = "";
+
+    public $width = 0.6;
+    public $height = 1.8;
+    public $eyeHeight = 1.5;
+
+    protected $gravity = 0.08;
+    protected $drag = 0.02;
+
+    public $scale = 1.0;
+
+    public $defaultHP = 1;
+    public $uuid;
+
+    public function __construct(Level $level, CompoundTag $nbt) {
+        $this-&gt;uuid = UUID::fromRandom();
+        $this-&gt;initSkin();
+
+        parent::__construct($level, $nbt);
+        $this-&gt;setRotation($this-&gt;yaw, $this-&gt;pitch);
+        $this-&gt;setNameTagAlwaysVisible(true);
+        $this-&gt;sendSkin();
+    }
+
+    public function initEntity(): void {
+        parent::initEntity();
+        $this-&gt;setScale($this-&gt;scale);
+        $this-&gt;setMaxHealth($this-&gt;defaultHP);
+        $this-&gt;setHealth($this-&gt;getMaxHealth());
+    }
+
+    private function initSkin(): void {
+        $this-&gt;setSkin(new Skin(
+            $this-&gt;skinId,
+            file_get_contents('path'),
+            $this-&gt;capeData,
+            $this-&gt;geometryId,
+            file_get_contents('path')
+        ));
+    }
+}
+</code></pre>
+
+</body>
+</html>
+  

@@ -4,19 +4,25 @@ import 'dart:svg';
 import '../../model/article.dart';
 import '../../model/tag.dart';
 import 'home_controller.dart';
+import 'home_service.dart';
 
 class Home {
+  static void init() {
+    HomeService.setUpCategoryListView();
+    querySelector('#search')?.onKeyPress.listen(HomeController.onKeyPressInSearchInput);
+  }
+
   static HtmlElement articleToHtmlElement(Article article) {
     var articleElement = AnchorElement(href: article.url)
-      ..className = 'article';
-    var titleElement = DivElement()
-      ..className = 'title'
-      ..text = article.title;
-    var conciseBodyElement = DivElement()
-      ..className = 'concise-body'
-      ..text = article.body;
-
-    articleElement.children.addAll([titleElement, conciseBodyElement]);
+      ..className = 'article'
+      ..children = [
+        DivElement()
+          ..className = 'title'
+          ..text = article.title,
+        DivElement()
+          ..className = 'concise-body'
+          ..text = article.body
+      ];
 
     return articleElement;
   }
@@ -37,20 +43,19 @@ class Home {
     var isTopLayer = false;
     if (parent == null) {
       isTopLayer = true;
-      parent = UListElement()
-        ..className = 'uk-nav uk-nav-default';
+      parent = UListElement()..className = 'uk-nav uk-nav-default';
     }
 
     categoryData.forEach((categoryName, value) {
-      var titleElement = AElement()
-        ..setAttribute('category-name', categoryName)
-        ..id = 'category-selector'
-        ..setAttribute('href', '#')
-        ..text = categoryName;
-
       var liElement = LIElement()
         ..className = isTopLayer ? 'uk-parent' : ''
-        ..children.add(titleElement);
+        ..children = [
+          AElement()
+            ..setAttribute('category-name', categoryName)
+            ..id = 'category-selector'
+            ..setAttribute('href', '#')
+            ..text = categoryName
+        ];
 
       parent!.children.add(liElement);
 
@@ -66,7 +71,7 @@ class Home {
       }
 
       if (isTopLayer) {
-        parent.children.add(LIElement()..className='uk-nav-divider');
+        parent.children.add(LIElement()..className = 'uk-nav-divider');
       }
     });
 

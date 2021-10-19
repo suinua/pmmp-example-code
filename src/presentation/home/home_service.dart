@@ -4,7 +4,7 @@ import '../../model/article.dart';
 import '../../pool/article_category_pool.dart';
 import '../../pool/article_tag_pool.dart';
 import '../../store/articles_store.dart';
-import '../../utility/FilterArtciles.dart';
+import '../../utility/filter_artciles.dart';
 import 'home.dart';
 import 'home_controller.dart';
 

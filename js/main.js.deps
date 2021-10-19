@@ -116,6 +116,7 @@ file:///home/runner/work/pmmp-example-code/pmmp-example-code/web/src/presentatio
 file:///home/runner/work/pmmp-example-code/pmmp-example-code/web/src/presentation/home/home_controller.dart
 file:///home/runner/work/pmmp-example-code/pmmp-example-code/web/src/presentation/home/home_service.dart
 file:///home/runner/work/pmmp-example-code/pmmp-example-code/web/src/store/articles_store.dart
-file:///home/runner/work/pmmp-example-code/pmmp-example-code/web/src/utility/FilterArtciles.dart
+file:///home/runner/work/pmmp-example-code/pmmp-example-code/web/src/utility/filter_artciles.dart
+file:///home/runner/work/pmmp-example-code/pmmp-example-code/web/src/utility/search_articles.dart
 file:///opt/hostedtoolcache/dart-sdk/lib/_internal/dart2js_nnbd_strong_platform.dill
 file:///opt/hostedtoolcache/dart-sdk/lib/libraries.json
