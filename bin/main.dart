@@ -86,9 +86,9 @@ void generateHtml(Article fileData, String path) {
     <title>${fileData.title}</title>
     <link rel="stylesheet" href="css/article.css">
 
-    <script src="highlight/highlight.min.js"></script>
     <link rel="stylesheet"
-          href="highlight/styles/idea.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
 </head>
 <body>
